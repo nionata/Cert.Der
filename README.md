@@ -12,3 +12,8 @@
 ### Setup
 
 - To run front end, `cd cert.der-web` and run `npm run serve`
+
+#### Adding components
+
+- To add a new component, copy one of the components in the `src/components` folder to a new `.vue` file
+- In `main.js`, import the component and use `Vue.component`, like the post component is.
