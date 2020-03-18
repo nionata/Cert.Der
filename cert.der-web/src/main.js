@@ -13,10 +13,12 @@ Vue.use(IconsPlugin)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import App from './App.vue'
-import Post from './components/post.vue'
+import App          from './App.vue'
+import Post         from './components/post.vue'
+import Dashboard    from './components/dashboard.vue'
 
 Vue.component('post', Post);
+Vue.component('dashboard', Dashboard)
 
 Vue.config.productionTip = true
 

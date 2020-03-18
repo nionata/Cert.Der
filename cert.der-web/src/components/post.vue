@@ -2,13 +2,11 @@
     <div class="container m-2">
         <div class="row">
             <div class="col-md-2 avatar">
-                <!-- Profile pic goes here -->
                 <img :src="avatar"
                     class="rounded-circle"
                     height="75px">
             </div>
             <div class="col-md-10">
-                <!-- Body goes here -->
                 <strong>{{ author }}</strong><br>
                 {{ msg }}
             </div>
