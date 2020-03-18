@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        CERT.DER
+        <h1>CERT.DER</h1>
 
         <div v-if="hasPosts">
             <post v-for="post in posts"
@@ -8,6 +8,7 @@
                 :author="post.author"
                 :msg="post.body"
                 :avatar="post.avatar"
+                :isLastPost="isLastPost(post.id)"
             ></post>
         </div>
     </div>
@@ -51,15 +52,31 @@ export default {
             return this.posts !== null && this.posts.length > 0
         }
     },
+
+    methods:
+    {
+        isLastPost(id)
+        {
+            return this.hasPosts && (id === this.posts.length - 1)
+        }
+    }
 }
 </script>
 
 <style>
+body {
+    background-color: #42b883;
+}
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
     margin-top: 60px;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
 }
 </style>

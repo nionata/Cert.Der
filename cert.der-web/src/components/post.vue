@@ -1,19 +1,19 @@
 <template>
-    <div class="hello">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2">
-                    <!-- Profile pic goes here -->
-                    <img :src="avatar"
-                        class="rounded-circle"
-                        height="75px">
-                </div>
-                <div class="col-md-10">
-                    <!-- Body goes here -->
-                    {{ msg }}
-                </div>
+    <div class="container m-2">
+        <div class="row">
+            <div class="col-md-2">
+                <!-- Profile pic goes here -->
+                <img :src="avatar"
+                    class="rounded-circle"
+                    height="75px">
+            </div>
+            <div class="col-md-10">
+                <!-- Body goes here -->
+                {{ msg }}
             </div>
         </div>
+
+        <hr v-if="!isLastPost">
     </div>
 </template>
 
@@ -24,6 +24,7 @@
             author: String,
             msg: String,
             avatar: String,
+            isLastPost: Boolean,
         }
     }
 </script>
