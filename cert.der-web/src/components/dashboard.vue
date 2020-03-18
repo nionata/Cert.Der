@@ -1,4 +1,5 @@
 <template>
+<div>
     <div v-if="hasPosts">
         <post v-for="post in posts"
             :key="post.id"
@@ -13,12 +14,16 @@
         <h1>AHHHH</h1>
         <p>No posts found.</p>
     </div>
+</div>
 </template>
 
 <script>
 
 export default {
-    name: 'Dashboard',
+    name: 'Dashboardf',
+    props: {
+        user: String,
+    },
     data: function() {
         return {
             posts: null
