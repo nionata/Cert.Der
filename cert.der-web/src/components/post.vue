@@ -1,7 +1,7 @@
 <template>
     <div class="container m-2">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-2 avatar">
                 <!-- Profile pic goes here -->
                 <img :src="avatar"
                     class="rounded-circle"
@@ -9,6 +9,7 @@
             </div>
             <div class="col-md-10">
                 <!-- Body goes here -->
+                <strong>{{ author }}</strong><br>
                 {{ msg }}
             </div>
         </div>
@@ -31,7 +32,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-    .rounded-circle {
+    .avatar {
         text-align: center;
     }
 </style>

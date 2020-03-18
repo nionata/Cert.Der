@@ -50,7 +50,7 @@ export default {
         hasPosts()
         {
             return this.posts !== null && this.posts.length > 0
-        }
+        },
     },
 
     methods:
@@ -58,7 +58,7 @@ export default {
         isLastPost(id)
         {
             return this.hasPosts && (id === this.posts.length - 1)
-        }
+        },
     }
 }
 </script>
