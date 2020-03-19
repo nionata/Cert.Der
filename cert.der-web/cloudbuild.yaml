@@ -8,6 +8,13 @@
       name: "node:10.15.1"
     -
       dir: 'cert.der-web'
+      args: ["run", "create-env"]
+      env:
+        - 'VUE_APP_API_HOST=${_API_HOST}'
+      entrypoint: npm
+      name: node:10.15.1
+    -
+      dir: 'cert.der-web'
       args:
         - run
         - build
