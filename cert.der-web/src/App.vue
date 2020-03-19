@@ -47,7 +47,7 @@
 
                 <input id="submit"
                     type="submit"
-                    class="col mb-2"
+                    class="btn btn-primary mb-2"
                     :value="submitText"
                     @click.prevent="requestAction()">
             </div>
