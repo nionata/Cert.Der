@@ -40,12 +40,11 @@ exports.updateImage = async (path, body) => {
 
     try {
         const db = await cloudsql();
-
         const res = await db.query('SELECT ID, Username, Admin, ProfilePic FROM Users WHERE ID = ?', [id]);
         if (!res || !res.length) return { message: 'user not found' };
 
-        const res = await db.query('UPDATE Users SET ProfilePic = ? WHERE ID = ?', [body.ProfilePic, id]);
-        console.log('update', res);
+        const update = await db.query('UPDATE Users SET ProfilePic = ? WHERE ID = ?', [body.ProfilePic, id]);
+        console.log('update', update);
         
         return { message: 'successfully updated profile picture' };
     } catch (err) {

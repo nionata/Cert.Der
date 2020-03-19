@@ -18,7 +18,7 @@ exports.authorizeRequest = async (req) => {
     console.log(req.headers);
     console.log(req.headers.cookie);
     
-    if (req.headers.cookie && JSON.parse(parseCookies(req.headers.cookie).auth)) {
+    if (req.headers.cookie && parseCookies(req.headers.cookie).auth && JSON.parse(parseCookies(req.headers.cookie).auth)) {
         return true;
     }
 
