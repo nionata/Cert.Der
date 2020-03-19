@@ -9,8 +9,6 @@ import {
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 // require('dotenv').config()
-const axios = require('axios').default;
-Vue.use(axios)
 
 // Bootstrap css files
 import 'bootstrap/dist/css/bootstrap.css'
