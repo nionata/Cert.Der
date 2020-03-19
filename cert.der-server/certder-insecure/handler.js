@@ -8,26 +8,32 @@ exports.auth = async (req, res) => {
   console.log(req.path, req.headers, req.body);
 
   try {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'POST')
-
     let response = '';
     let status = 200;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
-    if (req.method === 'POST') {
-      if (req.path === '/login') {
-        response = await auth.login(req.body);
-        if (response.message.includes('successfully')) {
-          res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]); 
-        } else {
-          status = 406;
+    switch (req.method) {
+      case 'POST':
+        if (req.path === '/login') {
+          response = await auth.login(req.body);
+          if (response.message.includes('successfully')) {
+            res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]); 
+          } else {
+            status = 406;
+          }
         }
-      }
-
-      if (req.path === '/signup') {
-        response = await auth.signup(req.body);
-        res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]);
-      }
+  
+        if (req.path === '/signup') {
+          response = await auth.signup(req.body);
+          res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]);
+        }
+        break;
+      case 'OPTIONS':
+        response = 'No content';
+        status = 204;
+        break;
     }
 
     if (response !== '') return res.status(status).json(response)
@@ -48,6 +54,10 @@ exports.users = async (req, res) => {
     }
 
     let response = '';
+    let status = 200;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
       case 'GET':
@@ -63,9 +73,13 @@ exports.users = async (req, res) => {
       case 'PUT':
         if (req.path !== '/') response = await users.updateImage(req.path, req.body);
         break;
+      case 'OPTIONS':
+        response = 'No content';
+        status = 204;
+        break;
     }
 
-    if (response !== '') return res.status(200).json(response)
+    if (response !== '') return res.status(status).json(response)
     return res.status(404).json({error: `${req.method} /users${req.path} not found!`});
   } catch (err) {
     console.log(err)
@@ -82,7 +96,11 @@ exports.posts = async (req, res) => {
       return res.status(401).json({response: 'Authorization missing'})
     }
     
-    let response = ''; 
+    let response = '';
+    let status = 200; 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
       case 'GET':
@@ -94,9 +112,13 @@ exports.posts = async (req, res) => {
       case 'PUT':
         if (req.path !== '/') response = await posts.pin(req.path);
         break;
+      case 'OPTIONS':
+        response = 'No content';
+        status = 204;
+        break;
     }
 
-    if (response !== '') return res.status(200).json(response)
+    if (response !== '') return res.status(status).json(response)
     return res.status(404).json({error: `${req.method} /posts${req.path} not found!`});
   } catch(err) {
     console.log(err)
