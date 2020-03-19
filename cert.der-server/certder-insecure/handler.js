@@ -7,6 +7,7 @@ const posts = require('./posts');
 exports.auth = async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'POST')
     console.log(req.headers, req.body);
 
     let response = '';
