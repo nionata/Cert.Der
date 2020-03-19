@@ -11,6 +11,10 @@
 
 ### Setup
 
+- Installation
+  - Front End
+    - `cd cert-der-web && npm i`
+    - Create `.env` file in `cert.der-web` and fill out values from `.env.example`
 - To run front end, `cd cert.der-web` and run `npm run serve`
 
 #### Adding components
