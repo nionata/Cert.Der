@@ -1,18 +1,17 @@
 'use strict';
 
-exports.getAll = async (body) => {
-    return 'successful';
-
+exports.getAll = async () => {
+    return {'users': []};
 }
 
-exports.get = async (id) => {
-    return 'successful';
+exports.get = async (path) => {
+    return {'user': path};
 }
 
 exports.create = async (body) => {
-    return 'successful';
+    return {'create': body};
 }
 
-exports.update = async (body) => {
-    return 'successful';
+exports.updateImage = async (path, body) => {
+    return {'update': path+body};
 }

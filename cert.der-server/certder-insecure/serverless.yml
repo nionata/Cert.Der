@@ -18,6 +18,10 @@ package:
     - .git/**
 
 functions:
+  auth:
+    handler: auth
+    events:
+      - http: path
   users:
     handler: users
     events:
@@ -27,11 +31,12 @@ functions:
     events:
       - http: path
 
+# Pain in the ass for now
 # you can define resources, templates etc. the same way you would in a
 # Google Cloud deployment configuration
-#resources:
+# resources:
 #  resources:
-#    - type: storage.v1.bucket
+#    - type: sqladmin.v1beta4.instance
 #      name: my-serverless-service-bucket
 #  imports:
 #    - path: my_template.jinja

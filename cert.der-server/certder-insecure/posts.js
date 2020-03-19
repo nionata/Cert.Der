@@ -1,14 +1,13 @@
 'use strict';
 
-exports.getAll = async (body) => {
-    return 'successful';
-
+exports.getAll = async () => {
+    return {'posts': []}
 }
 
 exports.create = async (body) => {
-    return 'successful';
+    return {'create': body}
 }
 
-exports.update = async (body) => {
-    return 'successful';
+exports.pin = async (path) => {
+    return {'pin': path};
 }
