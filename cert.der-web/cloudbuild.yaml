@@ -1,21 +1,22 @@
 ---
   steps:
     -
+      dir: 'cert.der-web'
       args:
         - install
       entrypoint: npm
       name: "node:10.15.1"
     -
+      dir: 'cert.der-web'
       args:
         - run
         - build
       entrypoint: npm
       name: "node:10.15.1"
     -
+      dir: 'cert.der-web'
       args:
         - app
         - deploy
       name: gcr.io/cloud-builders/gcloud
-    -
-      dir: 'cert.der-web'
   timeout: 1600s
