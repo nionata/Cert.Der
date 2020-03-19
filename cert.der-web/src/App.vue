@@ -36,6 +36,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
     name: 'App',
@@ -80,10 +81,14 @@ export default {
                 self.user = response
             })
             .catch(function (error) {
-                console.error(error)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid login. Please try again.'
+                })
             })
             .finally(function () {
-                // always executed
+                self.credentials.pass = null
             })
         }
     }
