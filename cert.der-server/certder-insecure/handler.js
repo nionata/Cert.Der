@@ -1,4 +1,5 @@
 'use strict';
+const dotenv = require('dotenv').config();
 const auth = require('./auth');
 const users = require('./users');
 const posts = require('./posts');
@@ -6,22 +7,29 @@ const posts = require('./posts');
 exports.auth = async (req, res) => {
   try {
     let response = '';
+    let status = 200;
 
     if (req.method === 'POST') {
       if (req.path === '/login') {
         response = await auth.login(req.body);
+        if (response.message.includes('successfully')) {
+          res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]); 
+        } else {
+          status = 406;
+        }
       }
 
       if (req.path === '/signup') {
         response = await auth.signup(req.body);
+        res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]);
       }
     }
 
-    if (response !== '') return res.state(200).json(response)
+    if (response !== '') return res.status(status).json(response)
     return res.status(404).json({error: `${req.method} ${req.path} not found!`});
   } catch (err) {
     console.log(err)
-    return res.status(500).json({error: err});
+    return res.status(500).json({error: JSON.stringify(err)});
   }
 }
 
@@ -50,11 +58,11 @@ exports.users = async (req, res) => {
         break;
     }
 
-    if (response !== '') return res.status(200).json(response);
+    if (response !== '') return res.status(200).json(response)
     return res.status(404).json({error: `${req.method} /users/${req.path} not found!`});
   } catch (err) {
     console.log(err)
-    return res.status(500).json({error: err});
+    return res.status(500).json({error: JSON.stringify(err)});
   }
 };
 
@@ -79,10 +87,10 @@ exports.posts = async (req, res) => {
         break;
     }
 
-    if (response !== '') return res.status(200).json(response);
+    if (response !== '') return res.status(200).json(response)
     return res.status(404).json({error: `${req.method} /posts/${req.path} not found!`});
   } catch(err) {
     console.log(err)
-    return res.status(500).json({error: err});
+    return res.status(500).json({error: JSON.stringify(err)});
   }
 };

@@ -1,14 +1,35 @@
 'use strict';
 
-// const uuid = require("uuid");
-// const bcrypt = require("bcryptjs");
-// const _ = require("lodash");
+// const uuid = require("uuid"); maybe for better sec
+const bcrypt = require('bcryptjs');
+const cloudsql = require('./cloudsql');
 
-// const SALT_ROUNDS = 10;
+const parseCookies = (cookie) => {
+    let rx = /([^;=\s]*)=([^;]*)/g;
+    let obj = { };
+    for ( let m ; m = rx.exec(cookie) ; )
+      obj[ m[1] ] = decodeURIComponent( m[2] );
+    return obj;
+}
 
 exports.authorizeRequest = async (req) => {
     // How could this ever be spoofed??
-    if (req.headers.auth && JSON.parse(req.headers.auth)) {
+    console.log(req.headers);
+    console.log(req.headers.cookie);
+    
+    if (req.headers.cookie && JSON.parse(parseCookies(req.headers.cookie).auth)) {
+        return true;
+    }
+
+    return false;
+}
+
+exports.isAdmin = async (req) => {
+    // How could this ever be spoofed??
+    console.log(req.headers);
+    console.log(req.headers.cookie);
+    
+    if (req.headers.cookie && JSON.parse(parseCookies(req.headers.cookie).admin)) {
         return true;
     }
 
@@ -16,55 +37,34 @@ exports.authorizeRequest = async (req) => {
 }
 
 exports.login = async (body) => {
-    return {'login': body};
+    // TODO: Input validation
+
+    try {
+        const db = await cloudsql();
+        const res = await db.query('SELECT ID, Password, Admin FROM Users WHERE Username = ?', [body.Username]);
+        if (!res || !res.length) return { message: 'that username and password combination is not valid' };
+
+        const { ID, Password, Admin } = res[0]
+        const isAuthenticated = await bcrypt.compare(body.Password, Password);
+        if (isAuthenticated) return { message: 'successfully signed in user', id: ID, admin: Admin };
+        return { message: 'that username and password combination is not valid' };
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
 };
 
 exports.signup = async (body) => {
-    return {'signup': body};
+    // TODO: Input validation
+    body.Password = await bcrypt.hash(body.Password, 10);
+
+    try {
+        const db = await cloudsql();
+        // check if username is a duplicate 
+        const response = await db.query('INSERT INTO Users SET ?', body);
+        return { message: 'successfully created user', id: response.insertId, admin: body.Admin };
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
 };
-
-// exports.signup = async (event, context, callback) => {
-//   const timestamp = new Date().getTime();
-//   const data = JSON.parse(event.body);
-
-//   // TODO: input validation
-
-//   // hash password
-//   const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);
-
-//   // insert user
-//   const params = {
-//     TableName: process.env.DYNAMODB_USERS_TABLE,
-//     Item: {
-//       id: uuid.v4(),
-//       email: data.email,
-//       password: hashedPassword,
-//       accountType: ACCOUNT_TYPE_USER,
-//       reviewStatus: REVIEW_STATUS_PENDING,
-//       createdAt: timestamp,
-//       updatedAt: timestamp
-//     }
-//   };
-
-//   // insert user to the database
-//   try {
-//     await dynamoDb.put(params).promise();
-
-//     // create a response
-//     const user = params.Item;
-//     const resp = _.omit(user, ["password"]); // leave out password field
-
-//     return {
-//       statusCode: 200,
-//       body: JSON.stringify(resp)
-//     };
-//   } catch (err) {
-//     // handle potential errors
-//     console.error(putError);
-//     return {
-//       statusCode: putError.statusCode || 501,
-//       headers: { "Content-Type": "text/plain" },
-//       body: "Couldn't create the user item."
-//     };
-//   }
-// };
