@@ -51,7 +51,7 @@ exports.users = async (req, res) => {
     }
 
     if (response !== '') return res.status(200).json(response);
-    return res.status(404).json({error: `${req.method} ${req.path} not found!`});
+    return res.status(404).json({error: `${req.method} /users/${req.path} not found!`});
   } catch (err) {
     console.log(err)
     return res.status(500).json({error: err});
@@ -80,7 +80,7 @@ exports.posts = async (req, res) => {
     }
 
     if (response !== '') return res.status(200).json(response);
-    return res.status(404).json({error: `${req.method} ${req.path} not found!`});
+    return res.status(404).json({error: `${req.method} /posts/${req.path} not found!`});
   } catch(err) {
     console.log(err)
     return res.status(500).json({error: err});
