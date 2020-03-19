@@ -1,5 +1,12 @@
+#Build
+dist
+
+# Node
 node_modules
+
+# Environment
 .env
 
+# OS
 .DS_Store
 .tmp

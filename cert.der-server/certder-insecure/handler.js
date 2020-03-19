@@ -6,6 +6,8 @@ const posts = require('./posts');
 
 exports.auth = async (req, res) => {
   try {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+
     let response = '';
     let status = 200;
 
