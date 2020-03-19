@@ -23,6 +23,9 @@ import Dashboard    from './components/dashboard.vue'
 Vue.component('post', Post);
 Vue.component('dashboard', Dashboard)
 
+// Don't show the vue production tip
+Vue.config.productionTip = false
+
 // Actually make the Vue app
 new Vue({
     render: h => h(App),

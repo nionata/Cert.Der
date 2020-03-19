@@ -167,14 +167,14 @@ export default {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
             }
-            const options = {
-                headers: {
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors',
-            }
+            // const options = {
+            //     headers: {
+            //         'Access-Control-Allow-Origin': '*'
+            //     },
+            //     mode: 'cors',
+            // }
 
-            axios.post(path, params, options)
+            axios.post(path, params)
             .then((res) => {
                 console.log(res)
                 self.user = res
