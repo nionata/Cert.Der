@@ -174,7 +174,7 @@ export default {
                 mode: 'cors',
             }
 
-            axios.post('path, params, options)
+            axios.post(path, params, options)
             .then((res) => {
                 console.log(res)
                 self.user = res
