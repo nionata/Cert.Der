@@ -53,8 +53,7 @@ exports.login = async (body) => {
 
         // Insecure err msg
         return { message: 'that password is incorrect' };
-    } catch(err) {
-        console.log(err);
+    } catch (err) {
         throw err;
     }
 };
@@ -68,8 +67,7 @@ exports.signup = async (body) => {
         // check if username is a duplicate 
         const response = await db.query('INSERT INTO Users SET ?', body);
         return { message: 'successfully created user', id: response.insertId, admin: body.Admin };
-    } catch(err) {
-        console.log(err);
+    } catch (err) {
         throw err;
     }
 };
