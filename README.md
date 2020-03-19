@@ -21,3 +21,7 @@
 
 - To add a new component, copy one of the components in the `src/components` folder to a new `.vue` file
 - In `main.js`, import the component and use `Vue.component`, like the post component is.
+
+### Deploy
+
+To build the front end, run `npm run build`, and deploy the dist folder.
