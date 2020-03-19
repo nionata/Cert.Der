@@ -5,10 +5,11 @@ const users = require('./users');
 const posts = require('./posts');
 
 exports.auth = async (req, res) => {
+  console.log(req.path, req.headers, req.body);
+
   try {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'POST')
-    console.log(req.headers, req.body);
 
     let response = '';
     let status = 200;
@@ -38,6 +39,8 @@ exports.auth = async (req, res) => {
 }
 
 exports.users = async (req, res) => {
+  console.log(req.path, req.headers, req.body);
+
   try {
     const authorized = await auth.authorizeRequest(req);
     if (!authorized) {
@@ -58,12 +61,12 @@ exports.users = async (req, res) => {
         if (req.path === '/') response = await users.create(req.body);
         break;
       case 'PUT':
-        if (req.path === '/') response = await users.updateImage(req.path, req.body);
+        if (req.path !== '/') response = await users.updateImage(req.path, req.body);
         break;
     }
 
     if (response !== '') return res.status(200).json(response)
-    return res.status(404).json({error: `${req.method} /users/${req.path} not found!`});
+    return res.status(404).json({error: `${req.method} /users${req.path} not found!`});
   } catch (err) {
     console.log(err)
     return res.status(500).json(err);
@@ -71,6 +74,8 @@ exports.users = async (req, res) => {
 };
 
 exports.posts = async (req, res) => {
+  console.log(req.path, req.headers, req.body);
+
   try {
     const authorized = await auth.authorizeRequest(req);
     if (!authorized) {
@@ -92,7 +97,7 @@ exports.posts = async (req, res) => {
     }
 
     if (response !== '') return res.status(200).json(response)
-    return res.status(404).json({error: `${req.method} /posts/${req.path} not found!`});
+    return res.status(404).json({error: `${req.method} /posts${req.path} not found!`});
   } catch(err) {
     console.log(err)
     return res.status(500).json(err);
