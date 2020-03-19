@@ -1,6 +1,9 @@
 #Build
 dist
 
+#certs
+cert.der-web/certs/*
+
 # Node
 node_modules
 

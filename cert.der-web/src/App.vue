@@ -58,9 +58,13 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import apiMixin from './mixins/api'
 
 export default {
     name: 'App',
+
+    mixins: [apiMixin],
+
     data: function() {
         return {
             // Page
@@ -131,24 +135,18 @@ export default {
         attemptSignUp()
         {
             const self = this
-            const path = process.env.VUE_APP_API_HOST + 'auth/signup'
+            const path = self.getPath('auth/signup')
             const params = {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
                 "Admin": false,
                 "ProfilePic": self.credentials.profilePicUrl,
             }
-            const options = {
-                headers: {
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors',
-            }
 
             if (!this.validateSignUp())
                 return
 
-            return axios.post(path, params, options)
+            return axios.post(path, params)
             .then((res) => {
                 console.log('Signup response', res)
                 self.user = res
@@ -162,17 +160,11 @@ export default {
         {
             const self = this
 
-            const path = process.env.VUE_APP_API_HOST + 'auth/login'
+            const path = self.getPath('auth/login')
             const params = {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
             }
-            // const options = {
-            //     headers: {
-            //         'Access-Control-Allow-Origin': '*'
-            //     },
-            //     mode: 'cors',
-            // }
 
             axios.post(path, params)
             .then((res) => {
