@@ -132,16 +132,23 @@ export default {
         {
             const self = this
             const path = process.env.VUE_APP_API_HOST + 'auth/signup'
-
-            if (!this.validateSignUp())
-                return
-
-            return axios.post(path, {
+            const params = {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
                 "Admin": false,
                 "ProfilePic": self.credentials.profilePicUrl,
-            })
+            }
+            const options = {
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                mode: 'cors',
+            }
+
+            if (!this.validateSignUp())
+                return
+
+            return axios.post(path, params, options)
             .then((res) => {
                 console.log('Signup response', res)
                 self.user = res
@@ -156,11 +163,18 @@ export default {
             const self = this
 
             const path = process.env.VUE_APP_API_HOST + 'auth/login'
-
-            axios.post(path, {
+            const params = {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
-            })
+            }
+            const options = {
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                mode: 'cors',
+            }
+
+            axios.post('path, params, options)
             .then((res) => {
                 console.log(res)
                 self.user = res
