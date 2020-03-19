@@ -6,6 +6,7 @@
     "setup": "./dev-setup.sh",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "create-env": "printenv > .env",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
