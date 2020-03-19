@@ -16,4 +16,6 @@
         - app
         - deploy
       name: gcr.io/cloud-builders/gcloud
+    -
+      dir: 'cert.der-web'
   timeout: 1600s
