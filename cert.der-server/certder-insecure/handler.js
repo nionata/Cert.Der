@@ -7,6 +7,7 @@ const posts = require('./posts');
 exports.auth = async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*')
+    console.log(req.headers, req.body);
 
     let response = '';
     let status = 200;
@@ -31,7 +32,7 @@ exports.auth = async (req, res) => {
     return res.status(404).json({error: `${req.method} ${req.path} not found!`});
   } catch (err) {
     console.log(err)
-    return res.status(500).json({error: JSON.stringify(err)});
+    return res.status(500).json(err);
   }
 }
 
@@ -64,7 +65,7 @@ exports.users = async (req, res) => {
     return res.status(404).json({error: `${req.method} /users/${req.path} not found!`});
   } catch (err) {
     console.log(err)
-    return res.status(500).json({error: JSON.stringify(err)});
+    return res.status(500).json({error: JSON.parse(err)});
   }
 };
 
@@ -93,6 +94,6 @@ exports.posts = async (req, res) => {
     return res.status(404).json({error: `${req.method} /posts/${req.path} not found!`});
   } catch(err) {
     console.log(err)
-    return res.status(500).json({error: JSON.stringify(err)});
+    return res.status(500).json({error: JSON.parse(err)});
   }
 };

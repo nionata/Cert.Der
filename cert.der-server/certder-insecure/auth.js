@@ -13,7 +13,8 @@ const parseCookies = (cookie) => {
 }
 
 exports.authorizeRequest = async (req) => {
-    // How could this ever be spoofed??
+    // Session/Cookie Hijack/Spoof
+    // Need to store session ID and encrypt
     console.log(req.headers);
     console.log(req.headers.cookie);
     
@@ -24,17 +25,17 @@ exports.authorizeRequest = async (req) => {
     return false;
 }
 
-exports.isAdmin = async (req) => {
-    // How could this ever be spoofed??
-    console.log(req.headers);
-    console.log(req.headers.cookie);
+// exports.isAdmin = async (req) => {
+//     // How could this ever be spoofed??
+//     console.log(req.headers);
+//     console.log(req.headers.cookie);
     
-    if (req.headers.cookie && JSON.parse(parseCookies(req.headers.cookie).admin)) {
-        return true;
-    }
+//     if (req.headers.cookie && JSON.parse(parseCookies(req.headers.cookie).admin)) {
+//         return true;
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
 exports.login = async (body) => {
     // TODO: Input validation
@@ -42,12 +43,16 @@ exports.login = async (body) => {
     try {
         const db = await cloudsql();
         const res = await db.query('SELECT ID, Password, Admin FROM Users WHERE Username = ?', [body.Username]);
-        if (!res || !res.length) return { message: 'that username and password combination is not valid' };
+
+        // Insecure err msg
+        if (!res || !res.length) return { message: 'that username does not exist' };
 
         const { ID, Password, Admin } = res[0]
         const isAuthenticated = await bcrypt.compare(body.Password, Password);
         if (isAuthenticated) return { message: 'successfully signed in user', id: ID, admin: Admin };
-        return { message: 'that username and password combination is not valid' };
+
+        // Insecure err msg
+        return { message: 'that password is incorrect' };
     } catch(err) {
         console.log(err);
         throw err;
