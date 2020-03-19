@@ -9,26 +9,47 @@
 
         <div v-else
             class="container">
-            <div class="col-md-6 offset-md-3 align-items-center">
+            <div class="col-md-8 offset-md-2 align-items-center text-center">
+                <h3>{{ currentMethod }}</h3>
+                <p>
+                    {{ logInHelpText }} <a href="#" @click.prevent="toggleSignup()">Click here to {{ changeMethodText }}.</a>
+                </p>
+
                 <input id="login"
                     type="text"
                     class="col mb-2"
                     v-model="credentials.user"
                     name="login"
-                    placeholder="login">
+                    placeholder="Username">
 
                 <input id="password"
                     type="password"
                     class="col mb-2"
                     v-model="credentials.pass"
                     name="login"
-                    placeholder="password">
+                    placeholder="Password">
+
+                <input id="confirmPass"
+                    v-show="isSigningUp"
+                    type="password"
+                    class="col mb-2"
+                    v-model="credentials.confirmPass"
+                    name="login"
+                    placeholder="Confirm Password">
+
+                <input id="profilePicUrl"
+                    v-show="isSigningUp"
+                    type="text"
+                    class="col mb-2"
+                    v-model="credentials.profilePicUrl"
+                    name="login"
+                    placeholder="URL to Profile Picture (Optional)">
 
                 <input id="submit"
                     type="submit"
                     class="col mb-2"
-                    value="Log In"
-                    @click.prevent="attemptLogin()">
+                    :value="submitText"
+                    @click.prevent="requestAction()">
             </div>
         </div>
     </div>
@@ -42,11 +63,17 @@ export default {
     name: 'App',
     data: function() {
         return {
+            // Page
+            isSigningUp: false,
+
+            // Session
             user: null,
             credentials: {
                 user: null,
                 pass: null,
-            }
+                confirmPass: null,
+                profilePicUrl: null,
+            },
         }
     },
 
@@ -62,10 +89,68 @@ export default {
         {
             return this.user !== null
         },
+
+        submitText()
+        {
+            return this.isSigningUp
+                ? "Sign Up"
+                : "Log In"
+        },
+
+        logInHelpText()
+        {
+            return this.isSigningUp
+                ? 'Already have an account?'
+                : 'Don\'t have an account yet?'
+        },
+
+        currentMethod()
+        {
+            return this.isSigningUp
+                ? 'Sign Up'
+                : 'Log In'
+        },
+
+        changeMethodText()
+        {
+            return this.isSigningUp
+                ? 'log in'
+                : 'sign up'
+        },
     },
 
     methods:
     {
+        requestAction()
+        {
+            return this.isSigningUp
+                ? this.attemptSignUp()
+                : this.attemptLogin()
+        },
+
+        attemptSignUp()
+        {
+            const self = this
+            const path = process.env.VUE_APP_API_HOST + 'auth/signup'
+
+            if (!this.validateSignUp())
+                return
+
+            return axios.post(path, {
+                "Username": self.credentials.user,
+                "Password": self.credentials.pass,
+                "Admin": false,
+                "ProfilePic": self.credentials.profilePicUrl,
+            })
+            .then((res) => {
+                console.log('Signup response', res)
+                self.user = res
+            })
+            .catch((err) => {
+                console.error('Error signing up', err)
+            })
+        },
+
         attemptLogin()
         {
             const self = this
@@ -76,21 +161,53 @@ export default {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
             })
-            .then(function (response) {
-                console.log(response)
-                self.user = response
+            .then((res) => {
+                console.log(res)
+                self.user = res
             })
-            .catch(function (error) {
+            .catch((err) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Invalid login. Please try again.'
                 })
+
+                console.error(err)
             })
-            .finally(function () {
+            .finally(() => {
                 self.credentials.pass = null
             })
-        }
+        },
+
+        toggleSignup()
+        {
+            this.isSigningUp = ! this.isSigningUp
+
+            if (!this.isSigningUp)
+            {
+                this.credentials.confirmPass = null
+                this.credentials.profilePicUrl = null
+            }
+        },
+
+        validateSignUp()
+        {
+            let errors = []
+            if (this.credentials.pass !== this.credentials.confirmPass)
+                errors.push('Passwords do not match.')
+
+            if (this.credentials.user === null || this.credentials.user === '')
+                errors.push('Please supply a Username.')
+
+            if (errors.length > 0)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    html: errors.join(`<br>`)
+                })
+
+            return errors.length === 0
+        },
     }
 }
 </script>
@@ -109,6 +226,6 @@ body {
 
 h1 {
     text-align: center;
-    color: #fff;
+    color: #35495e;
 }
 </style>
