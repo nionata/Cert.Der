@@ -1,9 +1,11 @@
 'use strict';
 
+const cloudsql = require('./cloudsql');
+
 exports.getAll = async () => {
     try {
         const db = await cloudsql();
-        const res = await db.query('SELECT Posts.ID, Users.Username, Posts.Content FROM Posts INNER JOIN Users ON Posts.UserID = Users.ID');
+        const res = await db.query('SELECT Posts.ID, Posts.Content, Posts.Pinned, Users.Username FROM Posts INNER JOIN Users ON Posts.UserID = Users.ID');
 
         return { message: '', users: res }
     } catch (err) {
@@ -38,7 +40,7 @@ exports.pin = async (path) => {
         const update = await db.query('UPDATE Posts SET Pinned = ? WHERE ID = ?', [!Pinned, id]);
         console.log('update', update);
         
-        return { message: `successfully ${Pinned ? 'pinned' : 'unpinned'} post` };
+        return { message: `successfully ${!Pinned ? 'pinned' : 'unpinned'} post` };
     } catch (err) {
         throw err;
     }
