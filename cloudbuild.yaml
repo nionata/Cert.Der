@@ -1,10 +1,19 @@
-steps:
-    - name: node:10.15.1
+---
+  steps:
+    -
+      args:
+        - install
       entrypoint: npm
-      args: ["install"]
-    - name: node:10.15.1
+      name: "node:10.15.1"
+    -
+      args:
+        - run
+        - build
       entrypoint: npm
-      args: ["run", "build"]
-    - name: "gcr.io/cloud-builders/gcloud"
-      args: ["app", "deploy"]
-    timeout: "1600s"
+      name: "node:10.15.1"
+    -
+      args:
+        - app
+        - deploy
+      name: gcr.io/cloud-builders/gcloud
+  timeout: 1600s
