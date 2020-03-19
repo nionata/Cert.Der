@@ -1,27 +1,31 @@
+// Imports
 import Vue from 'vue'
 import {
     BootstrapVue,
     IconsPlugin
 } from 'bootstrap-vue'
 
-// Install BootstrapVue
+// Packages
 Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+// require('dotenv').config()
+const axios = require('axios').default;
+Vue.use(axios)
 
 // Bootstrap css files
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+// Component imports
 import App          from './App.vue'
 import Post         from './components/post.vue'
 import Dashboard    from './components/dashboard.vue'
 
+// Make the components usable globally
 Vue.component('post', Post);
 Vue.component('dashboard', Dashboard)
 
-Vue.config.productionTip = true
-
+// Actually make the Vue app
 new Vue({
     render: h => h(App),
 }).$mount('#app')

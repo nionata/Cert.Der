@@ -7,19 +7,45 @@
             </dashboard>
         </div>
 
-        <div v-else>
-            <!-- Do login here -->
+        <div v-else
+            class="container">
+            <div class="col-md-6 offset-md-3 align-items-center">
+                <input id="login"
+                    type="text"
+                    class="col mb-2"
+                    v-model="credentials.user"
+                    name="login"
+                    placeholder="login">
+
+                <input id="password"
+                    type="password"
+                    class="col mb-2"
+                    v-model="credentials.pass"
+                    name="login"
+                    placeholder="password">
+
+                <input id="submit"
+                    type="submit"
+                    class="col mb-2"
+                    value="Log In"
+                    @click.prevent="attemptLogin()">
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 
 export default {
     name: 'App',
     data: function() {
         return {
             user: null,
+            credentials: {
+                user: null,
+                pass: null,
+            }
         }
     },
 
@@ -27,7 +53,6 @@ export default {
     {
         // Do login shit here
         // for now, just set a username to 'wcosker'
-        this.user = 'wcosker'
     },
 
     computed:
@@ -40,7 +65,27 @@ export default {
 
     methods:
     {
-        // ...
+        attemptLogin()
+        {
+            const self = this
+
+            const path = process.env.VUE_APP_API_HOST + 'auth/login'
+
+            axios.post(path, {
+                "Username": self.credentials.user,
+                "Password": self.credentials.pass,
+            })
+            .then(function (response) {
+                console.log(response)
+                self.user = response
+            })
+            .catch(function (error) {
+                console.error(error)
+            })
+            .finally(function () {
+                // always executed
+            })
+        }
     }
 }
 </script>
