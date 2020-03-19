@@ -26,7 +26,7 @@
                     type="password"
                     class="col mb-2"
                     v-model="credentials.pass"
-                    name="login"
+                    name="pass"
                     placeholder="Password">
 
                 <input id="confirmPass"
@@ -34,7 +34,7 @@
                     type="password"
                     class="col mb-2"
                     v-model="credentials.confirmPass"
-                    name="login"
+                    name="confirmPass"
                     placeholder="Confirm Password">
 
                 <input id="profilePicUrl"
@@ -42,7 +42,7 @@
                     type="text"
                     class="col mb-2"
                     v-model="credentials.profilePicUrl"
-                    name="login"
+                    name="profilePicUrl"
                     placeholder="URL to Profile Picture (Optional)">
 
                 <input id="submit"
