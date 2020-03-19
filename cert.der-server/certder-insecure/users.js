@@ -18,7 +18,7 @@ exports.get = async (path) => {
     if (splitPath.length !== 2) return { messsage: 'invalid user path' }
 
     const id = parseInt(splitPath[1])
-    if (id === NaN) return { message: 'invalid user id' }
+    if (isNaN(id)) return { message: 'invalid user id type' }
 
     try {
         const db = await cloudsql();
