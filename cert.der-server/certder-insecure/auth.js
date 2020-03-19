@@ -66,6 +66,7 @@ exports.signup = async (body) => {
         const db = await cloudsql();
         // check if username is a duplicate 
         const response = await db.query('INSERT INTO Users SET ?', body);
+        
         return { message: 'successfully created user', id: response.insertId, admin: body.Admin };
     } catch (err) {
         throw err;
