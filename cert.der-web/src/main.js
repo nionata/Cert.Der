@@ -8,7 +8,7 @@ import {
 // Packages
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
-// require('dotenv').config()
+require('dotenv').config()
 
 // Bootstrap css files
 import 'bootstrap/dist/css/bootstrap.css'
