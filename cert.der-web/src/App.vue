@@ -71,7 +71,11 @@ export default {
             isSigningUp: false,
 
             // Session
-            user: null,
+            user: {
+                userId: null,
+                admin: false,
+                auth: false,
+            },
             credentials: {
                 user: null,
                 pass: null,
@@ -85,6 +89,11 @@ export default {
     {
         // Do login shit here
         // for now, just set a username to 'wcosker'
+        // Check to see if we have a User ID cookie
+        // If so, log them in now
+        this.user.userId    = this.getCookie('id')
+        this.user.admin     = this.getCookie('admin')
+        this.user.auth      = this.getCookie('auth')
     },
 
     computed:
@@ -169,7 +178,7 @@ export default {
             axios.post(path, params)
             .then((res) => {
                 console.log(res)
-                self.user = res
+                self.userId = res.data
             })
             .catch((err) => {
                 Swal.fire({
@@ -214,6 +223,21 @@ export default {
 
             return errors.length === 0
         },
+
+        getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                let c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    let c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return null;
+        }
     }
 }
 </script>
