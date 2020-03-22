@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div style="height: 100%;">
+    <div class="text-center">
         {{ bannerText }}
     </div>
 </div>
@@ -15,7 +15,6 @@ export default {
 
     props: {
         user: Object,
-        username: null,
     },
 
     mixins: [
@@ -24,7 +23,7 @@ export default {
 
     data: function() {
         return {
-            // ...
+            username: null,
         }
     },
 
@@ -56,7 +55,7 @@ export default {
             const self = this
             const path = self.getPath(`users/${this.user.userId}`)
 
-            return axios.post(path)
+            return axios.get(path)
             .then((res) => {
                 console.log('get user response', res.data[0].Username)
                 self.username = res.data[0].Username
