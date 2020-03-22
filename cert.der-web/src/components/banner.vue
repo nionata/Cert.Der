@@ -11,7 +11,7 @@ import axios from 'axios'
 import apiMixin from '../mixins/api'
 
 export default {
-    name: 'Sidebar',
+    name: 'Banner',
 
     props: {
         user: Object,

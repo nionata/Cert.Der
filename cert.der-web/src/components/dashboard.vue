@@ -1,26 +1,20 @@
 <template>
 <div>
-    <div class="row">
-        <div class="col-md-2 text-center">
-            <sidebar></sidebar>
-        </div>
+    <banner :user="user"></banner>
 
-        <div class="col-md-10">
-            <div v-if="hasPosts">
-                <post v-for="post in posts"
-                    :key="post.id"
-                    :author="post.author"
-                    :msg="post.body"
-                    :avatar="post.avatar"
-                    :isLastPost="isLastPost(post.id)"
-                ></post>
-            </div>
+    <div v-if="hasPosts">
+        <post v-for="post in posts"
+            :key="post.id"
+            :author="post.author"
+            :msg="post.body"
+            :avatar="post.avatar"
+            :isLastPost="isLastPost(post.id)"
+        ></post>
+    </div>
 
-            <div v-else>
-                <h1>AHHHH</h1>
-                <p>No posts found.</p>
-            </div>
-        </div>
+    <div v-else>
+        <h1>AHHHH</h1>
+        <p>No posts found.</p>
     </div>
 </div>
 </template>
@@ -30,7 +24,7 @@
 export default {
     name: 'Dashboard',
     props: {
-        user: Object,
+        user: String,
     },
     data: function() {
         return {
