@@ -1,8 +1,7 @@
 <template>
 <div>
-    <div class="text-center">
-        {{ bannerText }}
-    </div>
+    <h4 class="text-center" v-html="bannerText">
+    </h4>
 </div>
 </template>
 
@@ -27,12 +26,17 @@ export default {
         }
     },
 
+    watch: {
+        user: () => {
+            if (this.user.userId != null && this.user.userId != "")
+                this.getUserFromApi()
+        }
+    },
+
     mounted()
     {
-        if (this.userId != null)
-        {
+        if (this.user.userId != null)
             this.getUserFromApi()
-        }
     },
 
     computed:
@@ -57,8 +61,7 @@ export default {
 
             return axios.get(path)
             .then((res) => {
-                console.log('get user response', res.data[0].Username)
-                self.username = res.data[0].Username
+                self.username = res.data.user[0].Username
             })
             .catch((err) => {
                 console.error('Error getting user', err)

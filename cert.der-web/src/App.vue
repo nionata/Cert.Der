@@ -91,16 +91,16 @@ export default {
         // for now, just set a username to 'wcosker'
         // Check to see if we have a User ID cookie
         // If so, log them in now
-        this.user.userId    = this.getCookie('id')
-        this.user.admin     = this.getCookie('admin')
-        this.user.auth      = this.getCookie('auth')
+        this.user.userId    = parseInt(this.getCookie('id'))
+        this.user.admin     = (this.getCookie('admin') == 1 ? true : false)
+        this.user.auth      = (this.getCookie('auth') == "true" ? true : false)
     },
 
     computed:
     {
         isLoggedIn()
         {
-            return this.user !== null
+            return this.user.userId !== null
         },
 
         submitText()
@@ -178,7 +178,8 @@ export default {
             axios.post(path, params)
             .then((res) => {
                 console.log(res)
-                self.userId = res.data
+                self.user.userId    = parseInt(res.data.id)
+                self.user.admin     = (res.data.admin == 1 ? true : false)
             })
             .catch((err) => {
                 Swal.fire({

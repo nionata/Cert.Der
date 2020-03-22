@@ -24,7 +24,7 @@
 export default {
     name: 'Dashboard',
     props: {
-        user: String,
+        user: Object,
     },
     data: function() {
         return {
