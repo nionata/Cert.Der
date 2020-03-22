@@ -50,7 +50,7 @@ exports.users = async (req, res) => {
   try {
     const authorized = await auth.authorizeRequest(req);
     if (!authorized) {
-      return res.status(401).json({response: 'Authorization missing'})
+      return res.status(401).json({response: 'authorization missing'})
     }
 
     let response = '';
@@ -93,7 +93,7 @@ exports.posts = async (req, res) => {
   try {
     const authorized = await auth.authorizeRequest(req);
     if (!authorized) {
-      return res.status(401).json({response: 'Authorization missing'})
+      return res.status(401).json({response: 'authorization missing'})
     }
     
     let response = '';
