@@ -2,17 +2,12 @@
     <div class="container m-2">
         <div class="row">
             <div class="col-md-2 avatar">
-                <img :src="avatar"
-                    class="rounded-circle"
-                    height="75px">
             </div>
             <div class="col-md-10">
-                <strong>{{ author }}</strong><br>
-                {{ msg }}
+                <strong>{{ username }}</strong><br>
+                {{ content }}
             </div>
         </div>
-
-        <hr v-if="!isLastPost">
     </div>
 </template>
 
@@ -20,10 +15,10 @@
     export default {
         name: 'Post',
         props: {
-            author: String,
-            msg: String,
-            avatar: String,
-            isLastPost: Boolean,
+            content: String,
+            id: Number,
+            pinned: Boolean,
+            username: String,
         }
     }
 </script>
