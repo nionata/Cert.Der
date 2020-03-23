@@ -106,11 +106,11 @@ export default {
         .then((res) => {
             const { userId, admin, auth } = res.data.status;
             
-            this.user.userId = userId;
-            this.user.admin = admin;
-            this.user.auth = auth;
+            self.user.userId = userId;
+            self.user.admin = admin;
+            self.user.auth = auth;
 
-            console.log('app mounted: ', self.user, self.status);
+            console.log('mounted user', self.user);
         })
         .catch((err) => {
             console.error(err)
