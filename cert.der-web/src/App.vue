@@ -69,6 +69,7 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.withCredentials = true
 import Swal from 'sweetalert2'
 import apiMixin from './mixins/api'
 
@@ -192,8 +193,11 @@ export default {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
             }
+            const options = {
+                withCredentials: true
+            }
 
-            axios.post(path, params)
+            axios.post(path, params, options)
             .then((res) => {
                 self.user.userId    = res.data.id
                 self.user.admin     = (res.data.admin == 1 ? true : false)
