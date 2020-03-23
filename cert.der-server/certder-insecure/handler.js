@@ -69,11 +69,7 @@ exports.users = async (req, res) => {
 
     switch (req.method) {
       case 'GET':
-        if (req.path === "/") {
-          response = await users.getAll();
-        } else {
-          response = await users.get(req.path)
-        }
+        if (req.path !== "/") response = await users.get(req.path)
         break;
       case 'POST':
         if (req.path === '/') response = await users.create(req.body);
