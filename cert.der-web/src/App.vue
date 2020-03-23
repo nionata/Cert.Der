@@ -100,6 +100,8 @@ export default {
 
     mounted()
     {
+        console.log('why');
+        
         const self = this
 
         const path = self.getPath('auth/status')
