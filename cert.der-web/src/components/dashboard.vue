@@ -16,6 +16,7 @@
                         :pinned="post.Pinned"
                         :username="post.Username"
                         :isAdmin="isAdmin"
+                        :profilePicUrl="post.ProfilePic"
                         @getPosts="getPosts()"
                     ></post>
                 </div>
