@@ -8,11 +8,14 @@
     </div>
 
     <div v-if="isAdmin"
-        class="col-md-2"
+        class="col-md-2 text-right"
         style="float: right;"
         @click.prevent="adminPinPost()"
     >
-        <font-awesome-icon icon="thumbtack" />
+        <span class="small">
+            Admin:
+            <font-awesome-icon icon="thumbtack" />
+        </span>
 
         <font-awesome-icon v-if="isFavoritingPost"
             icon="spinner" spin/>
@@ -53,17 +56,18 @@ import Swal from 'sweetalert2'
                 this.isFavoritingPost = true
 
                 const path = self.getPath(`posts/${this.id}`)
-                const params = {
 
-                }
-
-                return axios.put(path, params)
+                return axios.put(path)
                 .then(() => {
                     Swal.fire({
                         icon: 'success',
                         title: 'W00t!',
                         text: 'Successfully favorited post, Admin!'
                     })
+
+                    setTimeout(() => {
+                        self.$emit('getPosts')
+                    }, 500)
                 })
                 .catch(() => {
                     Swal.fire({

@@ -29,6 +29,7 @@
                         :pinned="post.Pinned"
                         :username="post.Username"
                         :isAdmin="isAdmin"
+                        @getPosts="getPosts()"
                     ></post>
                 </div>
 
