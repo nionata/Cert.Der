@@ -12,6 +12,7 @@ exports.auth = async (req, res) => {
     let status = 200;
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
@@ -57,6 +58,7 @@ exports.users = async (req, res) => {
     let status = 200;
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
@@ -100,6 +102,7 @@ exports.posts = async (req, res) => {
     let status = 200; 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
@@ -118,7 +121,7 @@ exports.posts = async (req, res) => {
         break;
     }
 
-    if (response !== '') return res.status(status).json(response)
+    if (response !== '') return res.status(status).json(response);
     return res.status(404).json({error: `${req.method} /posts${req.path} not found!`});
   } catch(err) {
     console.log(err)
