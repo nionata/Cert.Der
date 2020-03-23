@@ -1,0 +1,42 @@
+service: certder-api-insecure
+
+provider:
+  name: google
+  stage: dev
+  runtime: nodejs8
+  region: us-central1
+  project: certder
+  credentials: ~/.gcloud/certder-albert.json
+
+plugins:
+  - serverless-google-cloudfunctions
+
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - .git/**
+
+functions:
+  auth:
+    handler: auth
+    events:
+      - http: path
+  users:
+    handler: users
+    events:
+      - http: path
+  posts:
+    handler: posts
+    events:
+      - http: path
+
+# Pain in the ass for now
+# you can define resources, templates etc. the same way you would in a
+# Google Cloud deployment configuration
+# resources:
+#  resources:
+#    - type: sqladmin.v1beta4.instance
+#      name: my-serverless-service-bucket
+#  imports:
+#    - path: my_template.jinja
