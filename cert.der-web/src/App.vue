@@ -69,6 +69,7 @@
 
 <script>
 import axios from 'axios'
+axios.defaults.withCredentials = true
 import Swal from 'sweetalert2'
 import apiMixin from './mixins/api'
 
