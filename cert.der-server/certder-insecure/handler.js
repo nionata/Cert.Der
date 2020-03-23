@@ -10,18 +10,20 @@ exports.auth = async (req, res) => {
   let response = '';
   let status = 200;
   res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
   try {
     switch (req.method) {
+      case 'GET':
+        if (req.path === '/status') response = await auth.status(req.headers);
       case 'POST':
         if (req.path === '/login') {
           response = await auth.login(req.body);
           if (response.message.includes('successfully')) {
             const cookieOptions = `Path=/; SameSite=None; Secure; Domain=`;
-            res.setHeader('set-cookie', ['auth=true;'+cookieOptions, `id=${response.id};`+cookieOptions, `admin=${response.admin};`+cookieOptions]); 
+            res.setHeader('set-cookie', ['auth=true;'+cookieOptions, `id=${response.id};`+cookieOptions, `admin=${Boolean(response.admin)};`+cookieOptions]); 
           } else {
             status = 406;
           }
@@ -29,7 +31,7 @@ exports.auth = async (req, res) => {
   
         if (req.path === '/signup') {
           response = await auth.signup(req.body);
-          res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]);
+          res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${Boolean(response.admin)}; Path=/`]);
         }
         break;
       case 'OPTIONS':
