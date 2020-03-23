@@ -80,6 +80,11 @@ export default {
         {
             return this.posts !== null && this.posts.length > 0
         },
+
+        isAdmin()
+        {
+            return (this.user && this.user.admin)
+        },
     },
 
     methods:
@@ -138,11 +143,6 @@ export default {
             .finally(() => {
                 self.creatingPost = false
             })
-        },
-
-        isAdmin()
-        {
-            return (this.user && this.user.admin)
         },
 
         isLastPost(id)
