@@ -20,33 +20,23 @@ exports.getAll = async () => {
 exports.create = async (body) => {
     try {
         const db = await cloudsql();
-        console.log(getCookie("admin"))
-        if(getCookie("admin")=="1")
+
+        if (
+            req.headers.cookie
+            && parseCookies(req.headers.cookie).auth
+            && (JSON.parse(parseCookies(req.headers.cookie).admin) == "1")
+        )
         {
             const response = await db.query('INSERT INTO Posts SET ?', body);
             return { message: 'successfully created post', id: response.insertId };
         }
+        else
+        {
+            return {
+                message: 'Unable to create post. Are you an admin?'
+            }
+        }
     } catch (err) {
         throw err;
     }
-}
-
-function getCookie(cname) 
-{
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) 
-    {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') 
-        {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) 
-        {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
