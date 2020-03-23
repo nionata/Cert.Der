@@ -1,20 +1,46 @@
 <template>
 <div>
-    <banner :user="user"></banner>
+    <div class="container m-2">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <banner :user="user"></banner>
 
-    <div v-if="hasPosts">
-        <post v-for="post in posts"
-            :key="post.ID"
-            :content="post.Content"
-            :id="post.ID"
-            :pinned="post.Pinned"
-            :username="post.Username"
-        ></post>
-    </div>
+                <hr>
 
-    <div v-else>
-        <h1>AHHHH</h1>
-        <p>No posts found.</p>
+                <div v-if="isAdmin" class="text-center">
+                    <h3>Create new post</h3>
+                    <textarea v-model="newPost"
+                        class="w-100"
+                        placeholder="Admin: Add new post."
+                    ></textarea>
+
+                    <button class="btn btn-primary"
+                        @click.prevent="createPost()"
+                    >Create post</button>
+
+                    <hr>
+                </div>
+
+                <div v-if="hasPosts">
+                    <post v-for="post in posts"
+                        :key="post.ID"
+                        :content="post.Content"
+                        :id="post.ID"
+                        :pinned="post.Pinned"
+                        :username="post.Username"
+                    ></post>
+                </div>
+
+                <div v-else-if="loadingPosts">
+                    Loading posts...
+                </div>
+
+                <div v-else>
+                    <h1>AHHHH</h1>
+                    <p>No posts found.</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -22,6 +48,7 @@
 <script>
 import axios from 'axios'
 import apiMixin from '../mixins/api'
+import Swal from 'sweetalert2'
 
 export default {
     name: 'Dashboard',
@@ -35,30 +62,15 @@ export default {
 
     data: function() {
         return {
-            posts: null
+            posts: null,
+            loadingPosts: false,
+            creatingPost: false,
+            newPost: null,
         }
     },
 
     mounted()
     {
-        // On mount of home component, fetch the data
-        // and set the posts variable equal to that.
-        // For now, just fake it with some data
-        // this.posts = [
-        //     {
-        //         id: 0,
-        //         author: "Cill Wosker",
-        //         body: "Hi my name is Will and I have a fish tank.",
-        //         avatar: "https://scontent-mia3-1.xx.fbcdn.net/v/t1.0-9/62137754_2823978797629280_8994703511249747968_n.jpg?_nc_cat=101&_nc_sid=85a577&_nc_oc=AQnV1CbrS6SaQDDcUoEnG0OvNA9O3GP4I2GqSDxDJp1QjabnD81JQdIj6WAcas9z2cg&_nc_ht=scontent-mia3-1.xx&oh=6c07df497f272fd4fa134ee96b40ebc2&oe=5E966454",
-        //     },
-        //     {
-        //         id: 1,
-        //         author: "Luap Pe Grand",
-        //         body: "Hi my name is Paul and I don't have a fish tank.",
-        //         avatar: "https://scontent-mia3-1.xx.fbcdn.net/v/t1.0-9/p960x960/44807397_2457104064316757_7475865172574208000_o.jpg?_nc_cat=100&_nc_sid=7aed08&_nc_oc=AQkbLDDR-dx8YOZyoOY2KksvIGhtvWsEnsWX4uED1oAD18P9vJOQjwedHwYsZTfJBY0&_nc_ht=scontent-mia3-1.xx&_nc_tp=6&oh=c0b99370e223c7824661665b37c602b2&oe=5E964CE7",
-        //     }
-        // ]
-
         this.getPosts()
     },
 
@@ -75,15 +87,64 @@ export default {
         getPosts()
         {
             const self = this
+            self.loadingPosts = true
+
             const path = self.getPath(`posts`)
+
             return axios.get(path)
             .then((res) => {
                 self.posts = res.data.posts
             })
             .catch((err) => {
-                console.error('Error getting user', err)
+                console.error('Error getting posts', err)
+            })
+            .finally(() => {
+                self.loadingPosts = false
             })
         },
+
+        createPost()
+        {
+            const self = this
+            self.creatingPost = true
+
+            const path = self.getPath('posts')
+            const params = {
+                UserId: self.user.userId,
+                Content: self.newPost
+            }
+
+            return axios.post(path, params)
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'W00t!',
+                    text: 'Successfully created new post.'
+                })
+
+                setTimeout(() => {
+                    self.getPosts()
+                }, 1500)
+            })
+            .catch((err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hold up!',
+                    text: 'There was a problem. Are you an admin?'
+                })
+
+                console.error(err)
+            })
+            .finally(() => {
+                self.creatingPost = false
+            })
+        },
+
+        isAdmin()
+        {
+            return (this.user && this.user.admin)
+        },
+
         isLastPost(id)
         {
             return this.hasPosts && (id === this.posts.length - 1)

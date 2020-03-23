@@ -163,8 +163,8 @@ export default {
 
             return axios.post(path, params)
             .then((res) => {
-                console.log('Signup response', res)
-                self.user = res
+                self.user.userId    = res.data.id
+                self.user.admin     = (res.data.admin == 1 ? true : false)
             })
             .catch((err) => {
                 console.error('Error signing up', err)
@@ -183,8 +183,7 @@ export default {
 
             axios.post(path, params)
             .then((res) => {
-                console.log(res)
-                self.user.userId    = parseInt(res.data.id)
+                self.user.userId    = res.data.id
                 self.user.admin     = (res.data.admin == 1 ? true : false)
             })
             .catch((err) => {

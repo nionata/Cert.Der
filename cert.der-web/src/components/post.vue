@@ -1,13 +1,7 @@
 <template>
-    <div class="container m-2">
-        <div class="row">
-            <div class="col-md-2 avatar">
-            </div>
-            <div class="col-md-10">
-                <strong>{{ username }}</strong><br>
-                {{ content }}
-            </div>
-        </div>
+    <div class="mb-3">
+        <strong>{{ username }}</strong><br>
+        {{ content }}
     </div>
 </template>
 
