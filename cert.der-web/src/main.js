@@ -4,6 +4,8 @@ import {
     BootstrapVue,
     IconsPlugin
 } from 'bootstrap-vue'
+import axios from 'axios'
+axios.defaults.withCredentials = true
 
 // Packages
 Vue.use(BootstrapVue)
