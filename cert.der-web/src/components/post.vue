@@ -11,7 +11,7 @@
         props: {
             content: String,
             id: Number,
-            pinned: Boolean,
+            starred: Boolean,
             username: String,
         }
     }

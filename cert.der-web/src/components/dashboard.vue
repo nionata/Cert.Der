@@ -26,7 +26,7 @@
                         :key="post.ID"
                         :content="post.Content"
                         :id="post.ID"
-                        :pinned="post.Pinned"
+                        :starred="post.starred"
                         :username="post.Username"
                     ></post>
                 </div>
