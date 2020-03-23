@@ -72,10 +72,10 @@ exports.users = async (req, res) => {
         if (req.path !== "/") response = await users.get(req.path)
         break;
       case 'POST':
-        if (req.path === '/') response = await users.create(req.body);
+        if (req.path === '/search') response = await users.search(req.body)
         break;
       case 'PUT':
-        if (req.path !== '/') response = await users.updateImage(req.path, req.body);
+        if (req.path !== '/') response = await users.updateImage(req.path, req.body)
         break;
       case 'OPTIONS':
         response = 'No content';

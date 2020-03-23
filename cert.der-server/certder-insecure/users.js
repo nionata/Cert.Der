@@ -20,6 +20,19 @@ exports.get = async (path) => {
     }
 }
 
+exports.search = async (body) => {
+    try {
+        const { user } = body
+        const db = await cloudsql()
+        const res = await db.query(`SELECT ID, Username, Admin, ProfilePic FROM Users WHERE Username = '${user}'`);
+        if (!res || !res.length) return { message: 'user not found' };
+
+        return { message: '', user: res};
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.updateImage = async (path, body) => {
     const splitPath = path.split('/')
     if (splitPath.length !== 2) return { messsage: 'invalid user path' }
