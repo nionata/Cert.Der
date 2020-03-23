@@ -91,11 +91,13 @@ import Swal from 'sweetalert2'
             },
         },
 
-        correctedProfilePicUrl()
-        {
-            return (this.profilePicUrl !== null && this.profilePicUrl !== "")
-                ? this.profilePicUrl
-                : "//i.stack.imgur.com/l60Hf.png"
+        computed: {
+            correctedProfilePicUrl()
+            {
+                return (this.profilePicUrl !== null && this.profilePicUrl !== "")
+                    ? this.profilePicUrl
+                    : "/default.png"
+            },
         },
     }
 </script>
