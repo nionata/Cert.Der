@@ -41,9 +41,13 @@ exports.status = async (headers) => {
             const parsedCookies = parseCookies(headers.cookie);
             const { id, auth, admin } = parsedCookies;
 
+            console.log(auth, admin);
+
             if (id) currAuth.userId = parseInt(id);
-            if (auth) currAuth.auth = Boolean(auth);
-            if (admin) currAuth.admin = Boolean(admin);
+            if (auth) currAuth.auth = auth === 'true';
+            if (admin) currAuth.admin = admin === 'true';
+
+            console.log(currAuth);
         }
 
         return { message: '', status: currAuth };
