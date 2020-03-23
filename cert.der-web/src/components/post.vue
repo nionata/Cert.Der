@@ -2,7 +2,15 @@
 <div class="row pt-2 pb-1 mb-2"
     :class="{ pinned : pinned }"
 >
-    <div class="col-md-10">
+    <div class="col-md-2 avatar">
+        <!-- Profile pic goes here -->
+        <img :src="correctedProfilePicUrl"
+            class="rounded-circle"
+            height="75px"
+        />
+    </div>
+
+    <div class="col-md-8">
         <strong>{{ username }}</strong><br>
         {{ content }}
     </div>
@@ -41,6 +49,7 @@ import Swal from 'sweetalert2'
             pinned: Boolean,
             username: String,
             isAdmin: Boolean,
+            profilePicUrl: String,
         },
 
         data: () => {
@@ -80,6 +89,13 @@ import Swal from 'sweetalert2'
                     self.isFavoritingPost = false
                 })
             },
+        },
+
+        correctedProfilePicUrl()
+        {
+            return (this.profilePicUrl !== null && this.profilePicUrl !== "")
+                ? this.profilePicUrl
+                : "//i.stack.imgur.com/l60Hf.png"
         },
     }
 </script>
