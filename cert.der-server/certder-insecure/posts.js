@@ -20,31 +20,33 @@ exports.getAll = async () => {
 exports.create = async (body) => {
     try {
         const db = await cloudsql();
-        const response = await db.query('INSERT INTO Posts SET ?', body);
-
-        return { message: 'successfully created post', id: response.insertId };
+        console.log(getCookie("admin"))
+        if(getCookie("admin")=="1")
+        {
+            const response = await db.query('INSERT INTO Posts SET ?', body);
+            return { message: 'successfully created post', id: response.insertId };
+        }
     } catch (err) {
         throw err;
     }
 }
 
-exports.pin = async (path) => {
-    const splitPath = path.split('/')
-    if (splitPath.length !== 2) return { messsage: 'invalid post path' }
-
-    const id = parseInt(splitPath[1])
-    if (isNaN(id)) return { message: 'invalid post id type' }
-
-    try {
-        const db = await cloudsql();
-        const res = await db.query('SELECT * FROM Posts WHERE ID = ?', [id]);
-        if (!res || !res.length) return { message: 'post not found' };
-
-        const update = await db.query('UPDATE Posts SET Pinned = IF(Id = ?, 1, 0)', [id]);
-        console.log('update', update);
-        
-        return { message: `successfully pinned post` };
-    } catch (err) {
-        throw err;
+function getCookie(cname) 
+{
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) 
+    {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') 
+        {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) 
+        {
+            return c.substring(name.length, c.length);
+        }
     }
+    return "";
 }
