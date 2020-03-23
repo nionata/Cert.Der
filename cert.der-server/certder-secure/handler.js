@@ -1,133 +1,45 @@
 'use strict'
-const dotenv = require('dotenv').config()
-const auth = require('./auth')
-const users = require('./users')
-const posts = require('./posts')
+// Imports
+const express = require('express')
+const session = require('express-session')
+const cors = require('cors')
+require('dotenv').config()
+const { ORIGIN, SESSION_SECRET } = process.env
 
-const { ORIGIN } = process.env
+// Configuring Middleware
+const app = express()
 
-exports.auth = async (req, res) => {
-  console.log(req.path, req.headers, req.body)
-
-  let response = ''
-  let status = 200
-  res.setHeader('Access-Control-Allow-Origin', ORIGIN)
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
-
-  try {
-    switch (req.method) {
-      case 'GET':
-        if (req.path === '/status') response = await auth.status(req.headers)
-      case 'POST':
-        if (req.path === '/login') {
-          response = await auth.login(req.body)
-          if (response.message.includes('successfully')) {
-            const cookieOptions = `Path=/ SameSite=None Secure Domain=`
-            res.setHeader('set-cookie', ['auth=true'+cookieOptions, `id=${response.id}`+cookieOptions, `admin=${Boolean(response.admin)}`+cookieOptions]) 
-          } else {
-            status = 406
-          }
-        }
-  
-        if (req.path === '/signup') {
-          response = await auth.signup(req.body)
-          res.setHeader('set-cookie', ['auth=true Path=/', `id=${response.id} Path=/`, `admin=${Boolean(response.admin)} Path=/`])
-        }
-        break
-      case 'OPTIONS':
-        response = 'No content'
-        status = 204
-        break
-    }
-
-    if (response !== '') return res.status(status).json(response)
-    return res.status(404).json({error: `${req.method} ${req.path} not found!`})
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json(err)
+const coorsOptions = {
+  origin: ORIGIN,
+  credentials: true
+}
+const sessionOptions = {
+  secret: SESSION_SECRET,
+  cookie: {
+    secure: true
   }
 }
 
-exports.users = async (req, res) => {
-  console.log(req.path, req.headers, req.body)
+app.use(cors(coorsOptions))
+app.use(session(sessionOptions))
 
-  let response = ''
-  let status = 200
-  res.setHeader('Access-Control-Allow-Origin', ORIGIN)
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
+// Routers
+const auth = require('./routes/auth')
+const users = require('./routes/users')
+const posts = require('./routes/posts')
 
-  try {
-    const authorized = await auth.authorizeRequest(req)
-    if (req.method !== 'OPTIONS' && !authorized) {
-      status = 401
-      return res.status(status).json({response: 'authorization missing'})
-    }
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`)
+  console.log(`session ${req.session}`)
+  next()
+})
 
-    switch (req.method) {
-      case 'GET':
-        if (req.path !== "/") response = await users.get(req.path)
-        break
-      case 'POST':
-        if (req.path === '/search') response = await users.search(req.body)
-        break
-      case 'PUT':
-        if (req.path !== '/') response = await users.updateImage(req.path, req.body)
-        break
-      case 'OPTIONS':
-        response = 'No content'
-        status = 204
-        break
-    }
+app.use('/auth', auth)
+app.use('/users', users)
+app.use('/posts', posts)
 
-    if (response !== '') return res.status(status).json(response)
-    return res.status(404).json({error: `${req.method} /users${req.path} not found!`})
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json(err)
-  }
-}
+app.use(async (req, res) => {
+  return res.status(404).json({ error: `${req.method} ${req.path} not found!` })
+})
 
-exports.posts = async (req, res) => {
-  console.log(req.path, req.headers, req.body)
-
-  let response = ''
-  let status = 200 
-  res.setHeader('Access-Control-Allow-Origin', ORIGIN)
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
-
-  try {
-    const authorized = await auth.authorizeRequest(req)
-    if (req.method !== 'OPTIONS' && !authorized) {
-      status = 401
-      return res.status(status).json({response: 'authorization missing'})
-    }
-
-    switch (req.method) {
-      case 'GET':
-        if (req.path === '/') response = await posts.getAll()
-        break
-      case 'POST':
-        if (req.path === '/') response = await posts.create(req.body)
-        break
-      case 'PUT':
-        if (req.path !== '/') response = await posts.pin(req.path)
-        break
-      case 'OPTIONS':
-        response = 'No content'
-        status = 204
-        break
-    }
-
-    if (response !== '') return res.status(status).json(response)
-    return res.status(404).json({error: `${req.method} /posts${req.path} not found!`})
-  } catch(err) {
-    console.log(err)
-    return res.status(500).json(err)
-  }
-}
+exports.secure = app

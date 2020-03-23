@@ -1,6 +1,6 @@
 'use strict'
 
-const cloudsql = require('./cloudsql')
+const cloudsql = require('../utils/cloudsql')
 
 exports.getAll = async () => {
     try {

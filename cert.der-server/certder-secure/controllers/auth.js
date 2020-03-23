@@ -1,53 +1,22 @@
 'use strict'
 
-// const uuid = require("uuid") maybe for better sec
+const uuid = require("uuid")
 const bcrypt = require('bcryptjs')
-const cloudsql = require('./cloudsql')
+const cloudsql = require('../utils/cloudsql')
 const { PEPPER } = process.env
 
-const parseCookies = (cookie) => {
-    let rx = /([^=\s]*)=([^]*)/g
-    let obj = { }
-    for ( let m  m = rx.exec(cookie)  )
-      obj[ m[1] ] = decodeURIComponent( m[2] )
-    return obj
-}
-
-exports.authorizeRequest = async (req) => {
-    // Session/Cookie Hijack/Spoof
-    // Need to store session ID and encrypt
-    console.log(req.headers)
-    console.log(req.headers.cookie)
-
-    if (req.headers.cookie
-        && parseCookies(req.headers.cookie).auth
-        && JSON.parse(parseCookies(req.headers.cookie).auth)
-    ) {
-        return true
-    }
-
-    return false
-}
-
-exports.status = async (headers) => {
+exports.status = async (req) => {
     let currAuth =  {
         userId: null,
-        auth: null,
         admin: null
     }
 
     try {
-        if (headers.cookie) {
-            const parsedCookies = parseCookies(headers.cookie)
-            const { id, auth, admin } = parsedCookies
+        if (req.session.userId && req.session.admin) {
+            const { id, admin } = req.session
 
-            console.log(auth, admin)
-
-            if (id) currAuth.userId = parseInt(id)
-            if (auth) currAuth.auth = auth === 'true'
-            if (admin) currAuth.admin = admin === 'true'
-
-            console.log(currAuth)
+            currAuth.userId = parseInt(id)
+            currAuth.admin = admin === 'true'
         }
 
         return { message: '', status: currAuth }
