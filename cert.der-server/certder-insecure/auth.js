@@ -28,17 +28,28 @@ exports.authorizeRequest = async (req) => {
     return false;
 }
 
-// exports.isAdmin = async (req) => {
-//     // How could this ever be spoofed??
-//     console.log(req.headers);
-//     console.log(req.headers.cookie);
-    
-//     if (req.headers.cookie && JSON.parse(parseCookies(req.headers.cookie).admin)) {
-//         return true;
-//     }
+exports.status = async (headers) => {
+    let currAuth =  {
+        userId: null,
+        auth: null,
+        admin: null
+    };
 
-//     return false;
-// }
+    try {
+        if (headers.cookie) {
+            const parsedCookies = parseCookies(headers.cookie);
+            const { id, auth, admin } = parsedCookies;
+
+            if (id) currAuth.userId = parseInt(id);
+            if (auth) currAuth.auth = Boolean(auth);
+            if (admin) currAuth.admin = Boolean(admin);
+        }
+
+        return { message: '', status: currAuth };
+    } catch (err) {
+        throw err;      
+    }
+}
 
 exports.login = async (body) => {
     // TODO: Input validation
