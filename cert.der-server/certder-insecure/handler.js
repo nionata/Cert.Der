@@ -7,20 +7,21 @@ const posts = require('./posts');
 exports.auth = async (req, res) => {
   console.log(req.path, req.headers, req.body);
 
-  try {
-    let response = '';
-    let status = 200;
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+  let response = '';
+  let status = 200;
+  res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
+  try {
     switch (req.method) {
       case 'POST':
         if (req.path === '/login') {
           response = await auth.login(req.body);
           if (response.message.includes('successfully')) {
-            res.setHeader('set-cookie', ['auth=true; Path=/', `id=${response.id}; Path=/`, `admin=${response.admin}; Path=/`]); 
+            const cookieOptions = `Path=/; SameSite=None; Secure; Domain=`;
+            res.setHeader('set-cookie', ['auth=true;'+cookieOptions, `id=${response.id};`+cookieOptions, `admin=${response.admin};`+cookieOptions]); 
           } else {
             status = 406;
           }
@@ -48,18 +49,19 @@ exports.auth = async (req, res) => {
 exports.users = async (req, res) => {
   console.log(req.path, req.headers, req.body);
 
+  let response = '';
+  let status = 200;
+  res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+
   try {
     const authorized = await auth.authorizeRequest(req);
     if (!authorized) {
-      return res.status(401).json({response: 'authorization missing'})
+      status = 401;
+      return res.status(status).json({response: 'authorization missing'})
     }
-
-    let response = '';
-    let status = 200;
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
       case 'GET':
@@ -92,18 +94,19 @@ exports.users = async (req, res) => {
 exports.posts = async (req, res) => {
   console.log(req.path, req.headers, req.body);
 
+  let response = '';
+  let status = 200; 
+  res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+
   try {
     const authorized = await auth.authorizeRequest(req);
     if (!authorized) {
-      return res.status(401).json({response: 'authorization missing'})
+      status = 401;
+      return res.status(status).json({response: 'authorization missing'})
     }
-    
-    let response = '';
-    let status = 200; 
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
     switch (req.method) {
       case 'GET':
