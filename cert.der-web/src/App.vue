@@ -104,13 +104,11 @@ export default {
 
         axios.get(path)
         .then((res) => {
-            const { userId, admin, auth } = res.data.status;
+            const { userId, admin, auth } = res.data.status
 
-            self.user.userId = userId;
-            self.user.admin = admin;
-            self.user.auth = auth;
-
-            console.log('mounted user', self.user);
+            self.user.userId = userId
+            self.user.admin = admin
+            self.user.auth = auth
         })
         .catch((err) => {
             console.error(err)
@@ -248,29 +246,29 @@ export default {
         getCookie(c_name)
         {
             if (document.cookie.length > 0) {
-                let c_start = document.cookie.indexOf(c_name + "=");
+                let c_start = document.cookie.indexOf(c_name + "=")
                 if (c_start != -1) {
-                    c_start = c_start + c_name.length + 1;
-                    let c_end = document.cookie.indexOf(";", c_start);
+                    c_start = c_start + c_name.length + 1
+                    let c_end = document.cookie.indexOf(";", c_start)
                     if (c_end == -1) {
-                        c_end = document.cookie.length;
+                        c_end = document.cookie.length
                     }
-                    return unescape(document.cookie.substring(c_start, c_end));
+                    return unescape(document.cookie.substring(c_start, c_end))
                 }
             }
-            return null;
+            return null
         },
 
         createCookie(name,value,days) {
-            let expires;
+            let expires
             if (days) {
-                const date = new Date();
-                date.setTime(date.getTime()+(days*24*60*60*1000));
-                expires = "; expires="+date.toGMTString();
+                const date = new Date()
+                date.setTime(date.getTime()+(days*24*60*60*1000))
+                expires = "; expires="+date.toGMTString()
             }
             else
-                expires = "";
-            document.cookie = name+"="+value+expires+"; path=/";
+                expires = ""
+            document.cookie = name+"="+value+expires+"; path=/"
         },
 
         eraseCookie(name)
