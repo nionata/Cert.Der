@@ -7,21 +7,7 @@
 
                 <hr>
             </div>
-            <div class="col-md-6 offset-md-2">
-                <div class="text-center">
-                    <h3>Create new post</h3>
-                    <textarea v-model="newPost"
-                        class="w-100"
-                        placeholder="Add new post."
-                    ></textarea>
-
-                    <button class="btn btn-primary"
-                        @click.prevent="createPost()"
-                    >Create post</button>
-
-                    <hr>
-                </div>
-
+            <div class="col-md-6">
                 <div v-if="hasPosts">
                     <post v-for="post in posts"
                         :key="post.ID"
@@ -43,8 +29,23 @@
                     <p>No posts found.</p>
                 </div>
             </div>
-            <div class ="col-md-4">
+            <div class ="col-md-6">
+                <div class="text-center">
+                    <h3>Create new post</h3>
+                    <textarea v-model="newPost"
+                        class="w-100"
+                        placeholder="Add new post."
+                    ></textarea>
+
+                    <button class="btn btn-primary"
+                        @click.prevent="createPost()"
+                    >Create post</button>
+
+                    <hr>
+                </div>
+
                 <div v-if="isAdmin">
+                    <h4>Admin only!</h4>
                     <label for="fname">Search for any user...</label>
 
                     <input type="text"
