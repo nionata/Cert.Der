@@ -2,11 +2,12 @@
 <div>
     <div class="container m-2">
         <div class="row">
-            <div class="col-md-6 offset-md-2">
+            <div class="col-md-12">
                 <banner :user="user"></banner>
 
                 <hr>
-
+            </div>
+            <div class="col-md-6 offset-md-2">
                 <div class="text-center">
                     <h3>Create new post</h3>
                     <textarea v-model="newPost"
@@ -44,11 +45,22 @@
             </div>
             <div class ="col-md-4">
                 <div v-if="isAdmin">
-                    <form action="/action_page.php">
-                        <label for="fname">Search for any user...</label><br>
-                        <input type="text" id="fname" name="fname" value="John"><br>
-                        <input type="submit" value="Submit">
-                    </form>
+                    <label for="fname">Search for any user...</label>
+
+                    <input type="text"
+                        name="fname"
+                        class="mt-2 mb-2"
+                        placeholder="First name..."
+                        v-model="userSearchFirstName"
+                    ><br>
+
+                    <button class="btn btn-primary"
+                        @click.prevent="searchUser()"
+                    >
+                        Search
+                    </button>
+                    <font-awesome-icon v-if="isLoadingUserSearch"
+                        icon="spinner" spin/>
                 </div>
             </div>
         </div>
@@ -77,6 +89,8 @@ export default {
             loadingPosts: false,
             creatingPost: false,
             newPost: null,
+            userSearchFirstName: null,
+            isLoadingUserSearch: false,
         }
     },
 
@@ -154,6 +168,32 @@ export default {
             .finally(() => {
                 self.creatingPost = false
                 self.newPost = null
+            })
+        },
+
+        searchUser()
+        {
+            const self = this
+            this.isLoadingUserSearch = true
+
+            const FirstName = this.userSearchFirstName
+            const path = this.getPath('users/search')
+            const params = {
+                user: FirstName,
+            }
+
+            return axios.post(path, params)
+            .then((res) => {
+                // code runs when no error
+                console.log('response', res)
+            })
+            .catch((err) => {
+                // ahh there's been an error!
+                console.error('ahhh error', err)
+            })
+            .finally(() => {
+                // code always runs, regardless of error
+                self.isLoadingUserSearch = false
             })
         },
 
