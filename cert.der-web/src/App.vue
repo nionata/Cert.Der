@@ -121,6 +121,8 @@ export default {
     {
         isLoggedIn()
         {
+            console.log(this.user.userId, this.user.userId === null);
+            
             return this.user.userId !== null
         },
 

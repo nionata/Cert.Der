@@ -3,6 +3,7 @@
 // const uuid = require("uuid"); maybe for better sec
 const bcrypt = require('bcryptjs');
 const cloudsql = require('./cloudsql');
+const { PEPPER } = process.env;
 
 const parseCookies = (cookie) => {
     let rx = /([^;=\s]*)=([^;]*)/g;
@@ -62,7 +63,7 @@ exports.login = async (body) => {
         if (!res || !res.length) return { message: 'that username does not exist' };
 
         const { ID, Password, Admin } = res[0]
-        const isAuthenticated = await bcrypt.compare(body.Password, Password);
+        const isAuthenticated = await bcrypt.compare(PEPPER + body.Password, Password);
         if (isAuthenticated) return { message: 'successfully signed in user', id: ID, admin: Admin };
 
         // Insecure err msg
@@ -74,7 +75,7 @@ exports.login = async (body) => {
 
 exports.signup = async (body) => {
     // TODO: Input validation
-    body.Password = await bcrypt.hash(body.Password, 10);
+    body.Password = await bcrypt.hash(PEPPER + body.Password, 10);
 
     try {
         const db = await cloudsql();
