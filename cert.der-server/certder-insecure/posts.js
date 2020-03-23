@@ -20,22 +20,30 @@ exports.getAll = async () => {
 exports.create = async (body) => {
     try {
         const db = await cloudsql();
+        const response = await db.query('INSERT INTO Posts SET ?', body);
 
-        if (
-            req.headers.cookie
-            && parseCookies(req.headers.cookie).auth
-            && (JSON.parse(parseCookies(req.headers.cookie).admin) == "1")
-        )
-        {
-            const response = await db.query('INSERT INTO Posts SET ?', body);
-            return { message: 'successfully created post', id: response.insertId };
-        }
-        else
-        {
-            return {
-                message: 'Unable to create post. Are you an admin?'
-            }
-        }
+        return { message: 'successfully created post', id: response.insertId };
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.pin = async (path) => {
+    const splitPath = path.split('/')
+    if (splitPath.length !== 2) return { messsage: 'invalid post path' }
+
+    const id = parseInt(splitPath[1])
+    if (isNaN(id)) return { message: 'invalid post id type' }
+
+    try {
+        const db = await cloudsql();
+        const res = await db.query('SELECT * FROM Posts WHERE ID = ?', [id]);
+        if (!res || !res.length) return { message: 'post not found' };
+
+        const update = await db.query('UPDATE Posts SET Pinned = IF(Id = ?, 1, 0)', [id]);
+        console.log('update', update);
+        
+        return { message: `successfully pinned post` };
     } catch (err) {
         throw err;
     }
