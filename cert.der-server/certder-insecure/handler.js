@@ -4,12 +4,14 @@ const auth = require('./auth');
 const users = require('./users');
 const posts = require('./posts');
 
+const { ORIGIN } = process.env;
+
 exports.auth = async (req, res) => {
   console.log(req.path, req.headers, req.body);
 
   let response = '';
   let status = 200;
-  res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
+  res.setHeader('Access-Control-Allow-Origin', ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
@@ -53,14 +55,14 @@ exports.users = async (req, res) => {
 
   let response = '';
   let status = 200;
-  res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
+  res.setHeader('Access-Control-Allow-Origin', ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
   try {
     const authorized = await auth.authorizeRequest(req);
-    if (!authorized) {
+    if (req.method !== 'OPTIONS' && !authorized) {
       status = 401;
       return res.status(status).json({response: 'authorization missing'})
     }
@@ -98,14 +100,14 @@ exports.posts = async (req, res) => {
 
   let response = '';
   let status = 200; 
-  res.setHeader('Access-Control-Allow-Origin', 'https://certder.appspot.com');
+  res.setHeader('Access-Control-Allow-Origin', ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
 
   try {
     const authorized = await auth.authorizeRequest(req);
-    if (!authorized) {
+    if (req.method !== 'OPTIONS' && !authorized) {
       status = 401;
       return res.status(status).json({response: 'authorization missing'})
     }
