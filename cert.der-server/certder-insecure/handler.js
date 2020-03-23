@@ -5,6 +5,7 @@ const users = require('./users')
 const posts = require('./posts')
 
 const { ORIGIN } = process.env
+const cookieOptions = `Path=/; SameSite=None; Secure; Domain=`
 
 exports.auth = async (req, res) => {
   console.log(req.path, req.headers, req.body)
@@ -24,8 +25,7 @@ exports.auth = async (req, res) => {
         if (req.path === '/login') {
           response = await auth.login(req.body)
           if (response.message.includes('successfully')) {
-            const cookieOptions = `Path=/ SameSite=None Secure Domain=`
-            res.setHeader('set-cookie', ['auth=true'+cookieOptions, `id=${response.id}`+cookieOptions, `admin=${Boolean(response.admin)}`+cookieOptions]) 
+            res.setHeader('set-cookie', ['auth=true;'+cookieOptions, `id=${response.id};`+cookieOptions, `admin=${Boolean(response.admin)};`+cookieOptions]);
           } else {
             status = 406
           }
@@ -33,7 +33,7 @@ exports.auth = async (req, res) => {
   
         if (req.path === '/signup') {
           response = await auth.signup(req.body)
-          res.setHeader('set-cookie', ['auth=true Path=/', `id=${response.id} Path=/`, `admin=${Boolean(response.admin)} Path=/`])
+          res.setHeader('set-cookie', ['auth=true;'+cookieOptions, `id=${response.id};`+cookieOptions, `admin=${Boolean(response.admin)};`+cookieOptions]);
         }
         break
       case 'OPTIONS':
