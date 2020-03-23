@@ -6,9 +6,9 @@ const cloudsql = require('./cloudsql')
 const { PEPPER } = process.env
 
 const parseCookies = (cookie) => {
-    let rx = /([^=\s]*)=([^]*)/g
+    let rx = /([^;=\s]*)=([^;]*)/g
     let obj = { }
-    for ( let m  m = rx.exec(cookie)  )
+    for ( let m ; m = rx.exec(cookie) ; )
       obj[ m[1] ] = decodeURIComponent( m[2] )
     return obj
 }
