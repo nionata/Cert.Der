@@ -121,6 +121,7 @@ export default {
     {
         isLoggedIn()
         {
+            const self = this
             console.log(this.user.userId, this.user.userId === null);
             
             return this.user.userId !== null
