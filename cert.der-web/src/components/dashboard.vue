@@ -2,7 +2,7 @@
 <div>
     <div class="container m-2">
         <div class="row">
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-6 offset-md-2">
                 <banner :user="user"></banner>
 
                 <hr>
@@ -39,6 +39,15 @@
                 <div v-else>
                     <h1>AHHHH</h1>
                     <p>No posts found.</p>
+                </div>
+            </div>
+            <div class ="col-md-4">
+                <div v-if="isAdmin">
+                    <form action="/action_page.php">
+                        <label for="fname">Search for any user...</label><br>
+                        <input type="text" id="fname" name="fname" value="John"><br>
+                        <input type="submit" value="Submit">
+                    </form>
                 </div>
             </div>
         </div>
