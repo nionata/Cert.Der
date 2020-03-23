@@ -69,7 +69,6 @@
 
 <script>
 import axios from 'axios'
-axios.defaults.withCredentials = true
 import Swal from 'sweetalert2'
 import apiMixin from './mixins/api'
 
@@ -100,19 +99,18 @@ export default {
 
     mounted()
     {
-        console.log('why');
-        
         const self = this
-
         const path = self.getPath('auth/status')
 
         axios.get(path)
         .then((res) => {
-            const { userId, admin, auth } = res.status;
+            const { userId, admin, auth } = res.data.status;
             
-            this.user.userId = userId;
-            this.user.admin = admin;
-            this.user.auth = auth;
+            self.user.userId = userId;
+            self.user.admin = admin;
+            self.user.auth = auth;
+
+            console.log('mounted user', self.user);
         })
         .catch((err) => {
             console.error(err)
@@ -123,10 +121,7 @@ export default {
     {
         isLoggedIn()
         {
-            const self = this
-            console.log(self.user.userId, self.user.userId === null);
-            
-            return self.user.userId !== null
+            return this.user.userId !== null
         },
 
         submitText()
