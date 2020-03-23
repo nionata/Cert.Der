@@ -7,7 +7,7 @@
 
                 <hr>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 offset-md-1">
                 <div v-if="hasPosts">
                     <post v-for="post in posts"
                         :key="post.ID"
@@ -29,7 +29,7 @@
                     <p>No posts found.</p>
                 </div>
             </div>
-            <div class ="col-md-6">
+            <div class ="col-md-4 offset-md-1 border-left">
                 <div class="text-center">
                     <h3>Create new post</h3>
                     <textarea v-model="newPost"
@@ -46,11 +46,11 @@
 
                 <div v-if="isAdmin">
                     <h4>Admin only!</h4>
-                    <label for="fname">Search for any user...</label>
+                    <label for="fname">Search for any user...</label><br>
 
                     <input type="text"
                         name="fname"
-                        class="mt-2 mb-2"
+                        class="mt-2 mb-2 w-100"
                         placeholder="First name..."
                         v-model="userSearchFirstName"
                     ><br>
