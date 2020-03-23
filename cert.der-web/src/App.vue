@@ -100,19 +100,21 @@ export default {
 
     mounted()
     {
-        // Do login shit here
-        // for now, just set a username to 'wcosker'
-        // Check to see if we have a User ID cookie
-        // If so, log them in now
-        this.user.userId = this.getCookie('id') != null
-            ? parseInt(this.getCookie('id'))
-            : null
-        this.user.admin = this.getCookie('admin') != null
-            ? this.getCookie('admin') == "1" ? true : false
-            : null
-        this.user.auth = this.getCookie('auth') != null
-            ? (this.getCookie('auth') == "true" ? true : false)
-            : null
+        const self = this
+
+        const path = self.getPath('auth/status')
+
+        axios.get(path)
+        .then((res) => {
+            const { userId, admin, auth } = res.status;
+            
+            this.user.userId = userId;
+            this.user.admin = admin;
+            this.user.auth = auth;
+        })
+        .catch((err) => {
+            console.error(err)
+        })
     },
 
     computed:
@@ -193,11 +195,8 @@ export default {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
             }
-            const options = {
-                withCredentials: true
-            }
 
-            axios.post(path, params, options)
+            axios.post(path, params)
             .then((res) => {
                 self.user.userId    = res.data.id
                 self.user.admin     = (res.data.admin == 1 ? true : false)
