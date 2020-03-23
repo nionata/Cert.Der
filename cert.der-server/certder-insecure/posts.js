@@ -5,7 +5,7 @@ const cloudsql = require('./cloudsql');
 exports.getAll = async () => {
     try {
         const db = await cloudsql();
-        const res = await db.query('SELECT Posts.ID, Posts.Content, Posts.Pinned, Users.Username FROM Posts INNER JOIN Users ON Posts.UserID = Users.ID');
+        const res = await db.query('SELECT Posts.ID, Posts.Content, Posts.Pinned, Users.Username, Users.ProfilePic FROM Posts INNER JOIN Users ON Posts.UserID = Users.ID');
         let parsedRes = res.map(post => {
             post.Pinned = Boolean(post.Pinned);
             return post
