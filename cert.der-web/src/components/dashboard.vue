@@ -7,11 +7,11 @@
 
                 <hr>
 
-                <div v-if="isAdmin" class="text-center">
+                <div class="text-center">
                     <h3>Create new post</h3>
                     <textarea v-model="newPost"
                         class="w-100"
-                        placeholder="Admin: Add new post."
+                        placeholder="Add new post."
                     ></textarea>
 
                     <button class="btn btn-primary"
@@ -26,8 +26,9 @@
                         :key="post.ID"
                         :content="post.Content"
                         :id="post.ID"
-                        :Pinned="post.Pinned"
+                        :pinned="post.Pinned"
                         :username="post.Username"
+                        :isAdmin="isAdmin"
                     ></post>
                 </div>
 
@@ -142,6 +143,7 @@ export default {
             })
             .finally(() => {
                 self.creatingPost = false
+                self.newPost = null
             })
         },
 

@@ -5,6 +5,14 @@ import {
     IconsPlugin
 } from 'bootstrap-vue'
 import axios from 'axios'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fas)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 axios.defaults.withCredentials = true
 
 // Packages
@@ -20,12 +28,13 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import App          from './App.vue'
 import Post         from './components/post.vue'
 import Dashboard    from './components/dashboard.vue'
-import Banner      from './components/banner.vue'
+import Banner       from './components/banner.vue'
 
 // Make the components usable globally
 Vue.component('post', Post)
 Vue.component('dashboard', Dashboard)
 Vue.component('banner', Banner)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // Don't show the vue production tip
 Vue.config.productionTip = false

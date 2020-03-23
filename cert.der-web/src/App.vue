@@ -105,7 +105,7 @@ export default {
         axios.get(path)
         .then((res) => {
             const { userId, admin, auth } = res.data.status;
-            
+
             self.user.userId = userId;
             self.user.admin = admin;
             self.user.auth = auth;
