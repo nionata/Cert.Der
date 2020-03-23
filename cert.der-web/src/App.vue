@@ -193,7 +193,7 @@ export default {
                 "Password": self.credentials.pass,
             }
             const options = {
-                withCredentials: true,
+                withCredentials: true
             }
 
             axios.post(path, params, options)
