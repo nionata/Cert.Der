@@ -192,8 +192,11 @@ export default {
                 "Username": self.credentials.user,
                 "Password": self.credentials.pass,
             }
+            const options = {
+                credentials: 'include',
+            }
 
-            axios.post(path, params)
+            axios.post(path, params, options)
             .then((res) => {
                 self.user.userId    = res.data.id
                 self.user.admin     = (res.data.admin == 1 ? true : false)
