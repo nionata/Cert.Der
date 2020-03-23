@@ -1,5 +1,17 @@
 <template>
     <div id="app">
+        <div v-if="isLoggedIn"
+            class="pull-right"
+        >
+            <button
+                class="btn btn-primary mr-3"
+                style="float: right;"
+                @click.prevent="logout()"
+            >
+                Log out
+            </button>
+        </div>
+
         <h1>CERT.DER</h1>
 
         <div v-if="isLoggedIn">
@@ -100,10 +112,6 @@ export default {
         this.user.auth = this.getCookie('auth') != null
             ? (this.getCookie('auth') == "true" ? true : false)
             : null
-
-        console.log('id cookie', this.getCookie('id'))
-        console.log('admin cookie', this.getCookie('admin'))
-        console.log('auth cookie', this.getCookie('auth'))
     },
 
     computed:
@@ -234,7 +242,8 @@ export default {
             return errors.length === 0
         },
 
-        getCookie(c_name) {
+        getCookie(c_name)
+        {
             if (document.cookie.length > 0) {
                 let c_start = document.cookie.indexOf(c_name + "=");
                 if (c_start != -1) {
@@ -247,7 +256,36 @@ export default {
                 }
             }
             return null;
-        }
+        },
+
+        createCookie(name,value,days) {
+            let expires;
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                expires = "; expires="+date.toGMTString();
+            }
+            else
+                expires = "";
+            document.cookie = name+"="+value+expires+"; path=/";
+        },
+
+        eraseCookie(name)
+        {
+            this.createCookie(name, "", -1)
+        },
+
+        logout()
+        {
+            var cookies = document.cookie.split(";")
+
+            for (var i = 0; i < cookies.length; i++)
+                this.eraseCookie(cookies[i].split("=")[0])
+
+            this.user.admin     = false
+            this.user.auth      = false
+            this.user.userId    = null
+        },
     }
 }
 </script>
