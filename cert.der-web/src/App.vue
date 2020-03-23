@@ -124,9 +124,9 @@ export default {
         isLoggedIn()
         {
             const self = this
-            console.log(this.user.userId, this.user.userId === null);
+            console.log(self.user.userId, self.user.userId === null);
             
-            return this.user.userId !== null
+            return self.user.userId !== null
         },
 
         submitText()
