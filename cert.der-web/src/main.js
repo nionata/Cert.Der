@@ -29,12 +29,14 @@ import App          from './App.vue'
 import Post         from './components/post.vue'
 import Dashboard    from './components/dashboard.vue'
 import Banner       from './components/banner.vue'
+import User         from './components/user.vue'
 
 // Make the components usable globally
 Vue.component('post', Post)
 Vue.component('dashboard', Dashboard)
 Vue.component('banner', Banner)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('user', User)
 
 // Don't show the vue production tip
 Vue.config.productionTip = false
