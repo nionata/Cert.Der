@@ -7,7 +7,7 @@ router.get('/:id', async (req, res) => {
     let status = 200
 
     try {
-        response = await users.get(req.params.id)
+        response = await users.get(req.session.userId)
     } catch (err) {
         console.log(err)
         status = 500
