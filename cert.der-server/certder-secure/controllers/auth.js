@@ -1,6 +1,6 @@
 'use strict'
 
-const uuid = require("uuid")
+// const { v1 } = require('uuid')
 const bcrypt = require('bcryptjs')
 const cloudsql = require('../utils/cloudsql')
 const { PEPPER } = process.env
@@ -8,6 +8,9 @@ const { PEPPER } = process.env
 exports.status = async (req) => {
     try {
         const { userId, admin } = req.session
+
+        if (typeof userId === 'undefined') userId = null
+        if (typeof userId === 'undefined') admin = null
 
         return { message: '', status: { userId, admin } }
     } catch (err) {
@@ -42,7 +45,7 @@ exports.signup = async (body) => {
 
     try {
         const db = await cloudsql()
-        // check if username is a duplicate 
+        // body.ID = v1()
         const response = await db.query('INSERT INTO Users SET ?', body)
         
         return { message: 'successfully created user', id: response.insertId, admin: body.Admin }
