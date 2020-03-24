@@ -28,6 +28,7 @@ const auth = require('./routes/auth')
 const users = require('./routes/users')
 const posts = require('./routes/posts')
 
+// Middleware logging
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`)
   console.log(`session ${JSON.stringify(req.session)}`)
@@ -35,6 +36,14 @@ app.use((req, res, next) => {
 })
 
 app.use('/auth', auth)
+
+// Security check
+app.use((req, res, next) => {
+  const { userId, admin } = req.session
+
+  if (!admin) return res.status(401).json({ message: 'missing authorization' })
+})
+
 app.use('/users', users)
 app.use('/posts', posts)
 
