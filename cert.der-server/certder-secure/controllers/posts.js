@@ -17,10 +17,10 @@ exports.getAll = async () => {
     }
 }
 
-exports.create = async (body) => {
+exports.create = async (id, content) => {
     try {
         const db = await cloudsql()
-        const response = await db.query('INSERT INTO Posts SET ?', body)
+        const response = await db.query('INSERT INTO Posts SET UserId = ?, Content = ?', [id, content])
 
         return { message: 'successfully created post', id: response.insertId }
     } catch (err) {

@@ -22,8 +22,7 @@ router.post('/', async (req, res) => {
     let status = 200
 
     try {
-        req.body.userID = req.session.userId
-        response = await posts.create(req.body)
+        response = await posts.create(req.session.userId, req.body.Content)
     } catch (err) {
         console.log(err)
         status = 500
@@ -36,7 +35,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     let response = ''
     let status = 200
-    
+
     try {
         const { admin } = req.session
         if (!admin) {
