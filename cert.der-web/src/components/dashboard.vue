@@ -63,6 +63,22 @@
                     </button>
                     <font-awesome-icon v-if="isLoadingUserSearch"
                         icon="spinner" spin/>
+
+                    <div v-if="hasUsers"
+                        class="row"
+                    >
+                        <user v-for="user in users"
+                            :key="user.ID"
+                            :id="user.ID"
+                            :username="user.Username"
+                            :isAdmin="user.isAdmin"
+                            :profilePicUrl="user.ProfilePic"
+                        ></user>
+                    </div>
+
+                    <div v-else-if="noUsersFound">
+                        <p>No users found.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,6 +109,8 @@ export default {
             newPost: null,
             userSearchFirstName: null,
             isLoadingUserSearch: false,
+            users: [],
+            hasSearchedForUsers: false,
         }
     },
 
@@ -108,9 +126,19 @@ export default {
             return this.posts !== null && this.posts.length > 0
         },
 
+        hasUsers()
+        {
+            return (this.users && this.users.length > 0)
+        },
+
         isAdmin()
         {
             return (this.user && this.user.admin)
+        },
+
+        noUsersFound()
+        {
+            return this.hasSearchedForUsers && !this.isLoadingUserSearch
         },
     },
 
@@ -177,8 +205,9 @@ export default {
         {
             const self = this
             this.isLoadingUserSearch = true
+            this.hasSearchedForUsers = true
 
-            const FirstName = this.userSearchFirstName
+            const FirstName = this.isSecureSite ? escape(this.userSearchFirstName) : this.userSearchFirstName
             const path = this.getPath('users/search')
             const params = {
                 user: FirstName,
@@ -186,8 +215,7 @@ export default {
 
             return axios.post(path, params)
             .then((res) => {
-                // code runs when no error
-                console.log('response', res)
+                this.users = res.data.user
             })
             .catch((err) => {
                 // ahh there's been an error!
