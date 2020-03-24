@@ -7,7 +7,7 @@ const { PEPPER } = process.env
 
 exports.status = async (req) => {
     try {
-        const { userId, admin } = req.session
+        let { userId, admin } = req.session
 
         if (typeof userId === 'undefined') userId = null
         if (typeof userId === 'undefined') admin = null
