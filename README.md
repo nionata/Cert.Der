@@ -22,7 +22,7 @@
     - Get credentials for Google Cloud, and place in `~/.gcloud` directory
     - To deploy, run `sls deploy`
   
-- To run front end, `cd cert.der-web` and run `npm run serve`
+- To run front end locally, `cd cert.der-web` and run `npm run serve`
 
 #### Adding components
 
