@@ -29,9 +29,9 @@ router.post('/search', async (req, res) => {
     return res.status(status).json(response)
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/', async (req, res) => {
     try {
-        response = await users.updateImage(req.params.id, req.body)
+        response = await users.updateImage(req.session.userId, req.body)
     } catch (err) {
         console.log(err)
         status = 500
