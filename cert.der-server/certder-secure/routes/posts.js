@@ -19,6 +19,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
+        req.body.userID = req.session.userId
         response = await posts.create(req.body)
     } catch (err) {
         console.log(err)
@@ -31,7 +32,13 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        response = await posts.pin(req.params.id)
+        const { admin } = req.session
+        if (!admin) {
+            status = 401
+            response = { message: 'not authorized' }
+        } else {
+            response = await posts.pin(req.params.id)
+        }
     } catch (err) {
         console.log(err)
         status = 500
