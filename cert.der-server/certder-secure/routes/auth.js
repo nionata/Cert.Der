@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../controllers/auth')
 
-let response = ''
-let status = 200
-
 router.get('/status', async (req, res) => {
+    let response = ''
+    let status = 200
+
     try {
       response = await auth.status(req)
     } catch (err) {
@@ -18,6 +18,9 @@ router.get('/status', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
+    let response = ''
+    let status = 200
+
     try {
       response = await auth.login(req.body)
 
@@ -37,6 +40,9 @@ router.post('/login', async (req, res) => {
 })
 
 router.post('/signup', async (req, res) => {
+    let response = ''
+    let status = 200
+    
     try {
       req.body.Admin = false
       response = await auth.signup(req.body)

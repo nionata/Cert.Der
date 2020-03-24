@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 const users = require('../controllers/users')
 
-let response = ''
-let status = 200
-
 router.get('/:id', async (req, res) => {
+    let response = ''
+    let status = 200
+
     try {
         response = await users.get(req.params.id)
     } catch (err) {
@@ -18,6 +18,9 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/search', async (req, res) => {
+    let response = ''
+    let status = 200
+
     try {
         response = await users.search(req.body)
     } catch (err) {
@@ -30,6 +33,9 @@ router.post('/search', async (req, res) => {
 })
 
 router.put('/', async (req, res) => {
+    let response = ''
+    let status = 200
+    
     try {
         response = await users.updateImage(req.session.userId, req.body)
     } catch (err) {

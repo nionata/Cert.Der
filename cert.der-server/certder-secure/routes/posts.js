@@ -2,10 +2,10 @@ const express = require('express')
 const router = express.Router()
 const posts = require('../controllers/posts')
 
-let response = ''
-let status = 200
-
 router.get('/', async (req, res) => {
+    let response = ''
+    let status = 200
+
     try {
         response = await posts.getAll()
     } catch (err) {
@@ -18,6 +18,9 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+    let response = ''
+    let status = 200
+
     try {
         req.body.userID = req.session.userId
         response = await posts.create(req.body)
@@ -31,6 +34,9 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
+    let response = ''
+    let status = 200
+    
     try {
         const { admin } = req.session
         if (!admin) {
