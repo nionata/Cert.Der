@@ -4,6 +4,9 @@
 
 ### CIS 4930 - Software Security
 
+- Secure - https://certder.appspot.com/secure
+- Insecure - https://certder.appspot.com/insecure
+
 #### Structure
 
 - cert.der-web: front end
