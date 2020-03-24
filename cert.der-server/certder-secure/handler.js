@@ -16,7 +16,8 @@ const coorsOptions = {
 const sessionOptions = {
   secret: SESSION_SECRET,
   cookie: {
-    // secure: true
+    // secure: true,
+    sameSite: 'none'
   }
 }
 
@@ -41,7 +42,11 @@ app.use('/auth', auth)
 app.use((req, res, next) => {
   const { userId, admin } = req.session
 
-  if (!admin) return res.status(401).json({ message: 'missing authorization' })
+  if (typeof userId === 'undefined' && typeof admin === 'undefined') {
+    return res.status(401).json({ message: 'missing authorization' })
+  } else {
+    next()
+  }
 })
 
 app.use('/users', users)
