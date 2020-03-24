@@ -28,11 +28,8 @@ exports.create = async (body) => {
     }
 }
 
-exports.pin = async (path) => {
-    const splitPath = path.split('/')
-    if (splitPath.length !== 2) return { messsage: 'invalid post path' }
-
-    const id = parseInt(splitPath[1])
+exports.pin = async (rawPath) => {
+    const id = parseInt(rawPath)
     if (isNaN(id)) return { message: 'invalid post id type' }
 
     try {
