@@ -2,8 +2,16 @@
 <div class="row pt-2 pb-1 mb-2"
     :class="{ pinned : pinned }"
 >
-    <div class="col-md-2 avatar" v-html="imgHtml">
+    <div v-if="isSecureSite">
+        <img :src="correctedProfilePicUrl"
+            class="rounded-circle"
+            height="75px" />
     </div>
+
+    <div v-else
+        v-html="imgHtml"
+        class="col-md-2 avatar"
+    ></div>
 
     <div class="col-md-8">
         <strong>{{ username }}</strong><br>

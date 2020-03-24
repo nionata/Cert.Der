@@ -5,14 +5,17 @@ export default
 
 	computed:
 	{
-		// ...
+		isSecureSite()
+		{
+			return window.location.href.includes('secure')
+		},
 	},
 
 	methods:
 	{
         getPath(path)
         {
-			if (window.location.href.includes('/secure'))
+			if (this.isSecureSite)
 				path = 'secure/' + path
 
             return process.env.NODE_ENV === 'production'
