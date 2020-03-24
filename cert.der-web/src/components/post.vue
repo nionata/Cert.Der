@@ -2,12 +2,7 @@
 <div class="row pt-2 pb-1 mb-2"
     :class="{ pinned : pinned }"
 >
-    <div class="col-md-2 avatar">
-        <!-- Profile pic goes here -->
-        <img :src="correctedProfilePicUrl"
-            class="rounded-circle"
-            height="75px"
-        />
+    <div class="col-md-2 avatar" v-html="imgHtml">
     </div>
 
     <div class="col-md-8">
@@ -92,6 +87,11 @@ import Swal from 'sweetalert2'
         },
 
         computed: {
+            imgHtml()
+            {
+                return `<img src="${this.correctedProfilePicUrl}" class="rounded-circle" height="75px" />`
+            },
+
             correctedProfilePicUrl()
             {
                 return (this.profilePicUrl !== null && this.profilePicUrl !== "")
