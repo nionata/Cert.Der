@@ -38,6 +38,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
     try {
+      req.body.Admin = false
       response = await auth.signup(req.body)
       req.session.userId = response.id
       req.session.admin = Boolean(response.admin)
