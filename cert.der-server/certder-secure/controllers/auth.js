@@ -6,20 +6,10 @@ const cloudsql = require('../utils/cloudsql')
 const { PEPPER } = process.env
 
 exports.status = async (req) => {
-    let currAuth =  {
-        userId: null,
-        admin: null
-    }
-
     try {
-        if (req.session.userId && req.session.admin) {
-            const { id, admin } = req.session
+        const { userId, admin } = req.session
 
-            currAuth.userId = parseInt(id)
-            currAuth.admin = admin === 'true'
-        }
-
-        return { message: '', status: currAuth }
+        return { message: '', status: { userId, admin } }
     } catch (err) {
         throw err      
     }

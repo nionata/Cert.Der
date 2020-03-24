@@ -16,7 +16,7 @@ const coorsOptions = {
 const sessionOptions = {
   secret: SESSION_SECRET,
   cookie: {
-    secure: true
+    // secure: true
   }
 }
 
@@ -30,7 +30,7 @@ const posts = require('./routes/posts')
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`)
-  console.log(`session ${req.session}`)
+  console.log(`session ${JSON.stringify(req.session)}`)
   next()
 })
 

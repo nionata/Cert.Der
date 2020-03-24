@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
       response = await auth.login(req.body)
 
       if (response.message.includes('successfully')) {
-        req.session.id = response.id
+        req.session.userId = response.id
         req.session.admin = Boolean(response.admin)
       } else {
         status = 406
@@ -33,13 +33,13 @@ router.post('/login', async (req, res) => {
       response = err
     }
     
-    return res.status(status).json(response)
+    return res.status(status).send(response)
 })
 
 router.post('/signup', async (req, res) => {
     try {
       response = await auth.signup(req.body)
-      req.session.id = response.id
+      req.session.userId = response.id
       req.session.admin = Boolean(response.admin)
     } catch (err) {
       console.log(err)
@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
       response = err
     }
     
-    return res.status(status).json(response)
+    return res.status(status).send(response)
 })
 
 module.exports = router
