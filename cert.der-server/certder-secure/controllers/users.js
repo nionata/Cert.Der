@@ -1,12 +1,9 @@
 'use strict'
 
-const cloudsql = require('./cloudsql')
+const cloudsql = require('../utils/cloudsql')
 
-exports.get = async (path) => {
-    const splitPath = path.split('/')
-    if (splitPath.length !== 2) return { messsage: 'invalid user path' }
-
-    const id = parseInt(splitPath[1])
+exports.get = async (rawId) => {
+    const id = parseInt(rawId)
     if (isNaN(id)) return { message: 'invalid user id type' }
 
     try {
@@ -24,7 +21,7 @@ exports.search = async (body) => {
     try {
         const { user } = body
         const db = await cloudsql()
-        const res = await db.query(`SELECT ID, Username, Admin, ProfilePic FROM Users WHERE Username = '${user}'`)
+        const res = await db.query('SELECT ID, Username, Admin, ProfilePic FROM Users WHERE Username = ?', [user])
         if (!res || !res.length) return { message: 'user not found' }
 
         return { message: '', user: res}
@@ -33,11 +30,8 @@ exports.search = async (body) => {
     }
 }
 
-exports.updateImage = async (path, body) => {
-    const splitPath = path.split('/')
-    if (splitPath.length !== 2) return { messsage: 'invalid user path' }
-
-    const id = parseInt(splitPath[1])
+exports.updateImage = async (rawId, body) => {
+    const id = parseInt(rawId)
     if (isNaN(id)) return { message: 'invalid user id type' }
 
     try {

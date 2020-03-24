@@ -1,6 +1,6 @@
 'use strict'
 
-const cloudsql = require('./cloudsql')
+const cloudsql = require('../utils/cloudsql')
 
 exports.getAll = async () => {
     try {
@@ -17,10 +17,10 @@ exports.getAll = async () => {
     }
 }
 
-exports.create = async (body) => {
+exports.create = async (id, content) => {
     try {
         const db = await cloudsql()
-        const response = await db.query('INSERT INTO Posts SET ?', body)
+        const response = await db.query('INSERT INTO Posts SET UserId = ?, Content = ?', [id, content])
 
         return { message: 'successfully created post', id: response.insertId }
     } catch (err) {
@@ -28,11 +28,8 @@ exports.create = async (body) => {
     }
 }
 
-exports.pin = async (path) => {
-    const splitPath = path.split('/')
-    if (splitPath.length !== 2) return { messsage: 'invalid post path' }
-
-    const id = parseInt(splitPath[1])
+exports.pin = async (rawPath) => {
+    const id = parseInt(rawPath)
     if (isNaN(id)) return { message: 'invalid post id type' }
 
     try {
