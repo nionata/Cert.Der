@@ -16,6 +16,12 @@
     - `cd cert-der-web && npm i`
     - Create `.env` file in `cert.der-web` and fill out values from `.env.example`
     - Install Homebrew, and run `npm run setup` to setup and install keys for running securely
+  - Back End
+    - Make sure serverless is installed globally
+    - fill out `.env` from `.env.example`
+    - Get credentials for Google Cloud, and place in `~/.gcloud` directory
+    - To deploy, run `sls deploy`
+  
 - To run front end, `cd cert.der-web` and run `npm run serve`
 
 #### Adding components
@@ -25,4 +31,4 @@
 
 ### Deploy
 
-To build the front end, run `npm run build`, and deploy the dist folder.
+Master branch has a hook that auto builds and deploys through Google App Engine
