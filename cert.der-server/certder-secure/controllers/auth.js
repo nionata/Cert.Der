@@ -10,7 +10,7 @@ exports.status = async (req) => {
         let { userId, admin } = req.session
 
         if (typeof userId === 'undefined') userId = null
-        if (typeof userId === 'undefined') admin = null
+        if (typeof admin === 'undefined') admin = null
 
         return { message: '', status: { userId, admin } }
     } catch (err) {
