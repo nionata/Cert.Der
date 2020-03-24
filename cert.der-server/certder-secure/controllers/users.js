@@ -21,7 +21,7 @@ exports.search = async (body) => {
     try {
         const { user } = body
         const db = await cloudsql()
-        const res = await db.query(`SELECT ID, Username, Admin, ProfilePic FROM Users WHERE Username = '${user}'`)
+        const res = await db.query('SELECT ID, Username, Admin, ProfilePic FROM Users WHERE Username = ?', [user])
         if (!res || !res.length) return { message: 'user not found' }
 
         return { message: '', user: res}
