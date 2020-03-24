@@ -76,7 +76,7 @@
                         ></user>
                     </div>
 
-                    <div v-else-if="hasSearchedForUsers">
+                    <div v-else-if="noUsersFound">
                         <p>No users found.</p>
                     </div>
                 </div>
@@ -134,6 +134,11 @@ export default {
         isAdmin()
         {
             return (this.user && this.user.admin)
+        },
+
+        noUsersFound()
+        {
+            return this.hasSearchedForUsers && !this.isLoadingUserSearch
         },
     },
 
