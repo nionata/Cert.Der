@@ -5,7 +5,7 @@
 ### CIS 4930 - Software Security
 
 - Secure - https://certder.appspot.com/secure
-- Insecure - https://certder.appspot.com/insecure
+- Insecure - https://certder.appspot.com/
 
 #### Structure
 
