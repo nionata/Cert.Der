@@ -3,6 +3,7 @@ dist
 
 #certs
 cert.der-web/certs/*
+cert.der-server/certs/*
 
 # Node
 node_modules
