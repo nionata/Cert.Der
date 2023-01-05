@@ -16,7 +16,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@vue/cli-plugin-babel": "^4.2.3",
     "@vue/cli-plugin-eslint": "^4.2.3",
-    "@vue/cli-service": "^4.2.3",
+    "@vue/cli-service": "^5.0.8",
     "axios": "^0.19.2",
     "babel-eslint": "^10.0.3",
     "bootstrap": "^4.4.1",
